@@ -4,7 +4,9 @@ import sys
 import os
 # add module folders to path
 sys.path.append(os.getcwd()+'/Gmodule')
-import gExtract as gExtract
+sys.path.append(os.getcwd()+'/MSHmodule')
+import gExtract
+import mshExtract
 from MainFrame import MFrame
 from constants import constants
 
@@ -15,17 +17,21 @@ print('constants initialized')
 ## open stl file
 print('exctracting geometry from file')
 path='D:/tre.stl'
-try:
-    model,cmass=gExtract.eSTL(path) # model=[[normal,vecn1,vecn2,vecn3],... ](triangles); cmass = (x,y,z)
-    print('stl surface elements: ',len(model))
-except:
-    print('no model detected. sry')
+model,cmass=gExtract.eSTL(path) # model=[[normal,vecn1,vecn2,vecn3],... ](triangles); cmass = (x,y,z)
+print('stl surface elements: ',len(model))
 
 ##assign geometry
 cons.vect=model
 cons.cmass_xyz=cmass
 cons.Gwidgets.append('geometry')
 print('model assigned to constants')
+
+## open mesh file
+#print('exctracting geometry from file')
+#path='D:/el_ex.txt'
+#mesh=mshExtract.mshAN(path)  #mshCmass
+
+#print('stl surface elements: ',len(mesh))
 
 ## Initialize Main Frame with specific constants
 MFrame(cons)

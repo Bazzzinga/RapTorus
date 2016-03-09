@@ -82,13 +82,13 @@ class G3Dcnv:
         def def_rot_center(event):
             x,y=event.x, event.y
             cons.start_rot=x,y
-            #draw(canvas)
+            draw(canvas)
 
         def new_base_vec(event):
             if cons.subvect!=[]:
                 cons.vect=cons.subvect
                 cons.angl=0
-            #draw(canvas)
+            draw(canvas)
 
         def do_rot_motion(event): # changing direction vector based on the position where cursor is
             x, y = event.x, event.y  
@@ -103,7 +103,7 @@ class G3Dcnv:
 
         def do_scale(event):
             canvas.focus_set()
-            if event.delta>0:
+            if event.delta<0:
                 cons.scale_factor=cons.scale_factor*10/11.0
             else:
                 cons.scale_factor=cons.scale_factor*1.1
@@ -112,11 +112,11 @@ class G3Dcnv:
         def start_position(event):
             x, y = event.x, event.y
             cons.cursor_start_xy=x,y
-            #draw(canvas)
+            draw(canvas)
 
         def new_position(event):
             cons.position_xy=cons.cur_position_xy
-            #draw(canvas)
+            draw(canvas)
 
         def do_translate_motion(event):
             x, y = event.x, event.y
