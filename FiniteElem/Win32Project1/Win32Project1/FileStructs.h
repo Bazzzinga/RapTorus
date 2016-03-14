@@ -2,10 +2,12 @@
 
 struct _VertexS
 {
-	unsigned int id;
-	float x1;
-	float x2;
-	float x3;
+	unsigned int node_id;
+	int solid_entity;
+	int solid_line_location;
+
+	double x[3] = { 0, 0, 0 };
+	double a[3] = { 0, 0, 0 };
 };
 
 struct _EdgesS
@@ -25,4 +27,13 @@ struct _EdgesS
 	std::vector<_VertexS> vertexList;
 
 	bool quad; // false - triangle  true - quad
+};
+
+struct _rowFormatS
+{
+	int row_num = 0;
+	int row_width = 0;
+	int frow_num = 0;
+	int frow_width = 0;
+	int precision = 0;
 };

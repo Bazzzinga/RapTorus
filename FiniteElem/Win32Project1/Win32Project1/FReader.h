@@ -5,12 +5,20 @@
 class FReader
 {
 private:
-	int modelType;
-	int _dimm;
+	int modelType;  // 0 - SHELL   1 - SOLID 
 	int err;
 	std::vector<_VertexS> _VSVertex;
 	std::vector<_EdgesS> _VSEdges;
-	//int magic_n1, magic_n2;
+
+	bool checkBlockFormat(std::string str, const char * e_str);
+
+	_rowFormatS parseNodeBlockFormat(std::string str);
+	_VertexS parseNodeRow(std::string str, _rowFormatS rf);
+
+	_rowFormatS parseElementBlockFormat(std::string str);
+	_EdgesS parseElementRow(std::string str, _rowFormatS rf);
+
+
 public:
 	FReader(const char* fn);
 	~FReader();
