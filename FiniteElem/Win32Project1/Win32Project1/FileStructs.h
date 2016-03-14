@@ -1,5 +1,7 @@
 #pragma once
 
+#define EDGE_NODES_COL_COUNT 8
+
 struct _VertexS
 {
 	unsigned int node_id;
@@ -21,12 +23,9 @@ struct _EdgesS
 	unsigned short reference;
 	unsigned short shape;
 	unsigned short nodes_num;
-	unsigned short n10;
 	unsigned int id;
 
-	std::vector<_VertexS> vertexList;
-
-	bool quad; // false - triangle  true - quad
+	std::vector<int> vertexIDList;
 };
 
 struct _rowFormatS

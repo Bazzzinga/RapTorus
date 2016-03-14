@@ -16,7 +16,7 @@ private:
 	_VertexS parseNodeRow(std::string str, _rowFormatS rf);
 
 	_rowFormatS parseElementBlockFormat(std::string str);
-	_EdgesS parseElementRow(std::string str, _rowFormatS rf);
+	_EdgesS parseElementRow(std::string str, _rowFormatS rf, std::ifstream * f);
 
 
 public:

@@ -102,8 +102,8 @@ FReader::FReader(const char* fn)
 						end = true;
 					else
 					{
-						//_VertexS node = this->parseNodeRow(nb_line, rowFormat);
-						//_VSVertex.push_back(node);
+						_EdgesS node = this->parseElementRow(nb_line, rowFormat, &f);
+						_VSEdges.push_back(node);
 					}
 				}
 				else { this->err = 1; return; }
@@ -111,6 +111,8 @@ FReader::FReader(const char* fn)
 		}
 						
 	}
+
+	f.close();
 
 	return;
 }
@@ -237,9 +239,91 @@ _rowFormatS FReader::parseElementBlockFormat(std::string str)
 	return res;
 }
 
-_EdgesS FReader::parseElementRow(std::string str, _rowFormatS rf)
+_EdgesS FReader::parseElementRow(std::string str, _rowFormatS rf, std::ifstream * f)
 {
 	_EdgesS res;
+	std::string second_line;
+	std::string temp;
+	
+	int pos = 0;
+
+	temp = str.substr(pos, rf.row_width);  //получаем id материала
+	res.material = atoi(temp.c_str());
+	pos += rf.row_width;
+	if (pos >(int)str.size()) { this->err = 1; return res; }
+
+	temp = str.substr(pos, rf.row_width);  //получаем тип элемента
+	res.type = atoi(temp.c_str());
+	pos += rf.row_width;
+	if (pos >(int)str.size()) { this->err = 1; return res; }
+
+	temp = str.substr(pos, rf.row_width);  //получаем real constant number
+	res.cnst = atoi(temp.c_str());
+	pos += rf.row_width;
+	if (pos >(int)str.size()) { this->err = 1; return res; }
+
+	temp = str.substr(pos, rf.row_width);  //получаем id секции
+	res.section = atoi(temp.c_str());
+	pos += rf.row_width;
+	if (pos >(int)str.size()) { this->err = 1; return res; }
+
+	temp = str.substr(pos, rf.row_width);  //получаем id системы координат
+	res.cs = atoi(temp.c_str());
+	pos += rf.row_width;
+	if (pos >(int)str.size()) { this->err = 1; return res; }
+
+	temp = str.substr(pos, rf.row_width);  //получаем флаг рождения/смерти
+	res.life_flag = atoi(temp.c_str());
+	pos += rf.row_width;
+	if (pos >(int)str.size()) { this->err = 1; return res; }
+	
+	temp = str.substr(pos, rf.row_width);  //получаем номер соответствующей solid-модели
+	res.reference = atoi(temp.c_str());
+	pos += rf.row_width;
+	if (pos >(int)str.size()) { this->err = 1; return res; }
+
+	temp = str.substr(pos, rf.row_width);  //получаем флаг формы элемента
+	res.shape = atoi(temp.c_str());
+	pos += rf.row_width;
+	if (pos >(int)str.size()) { this->err = 1; return res; }
+
+	temp = str.substr(pos, rf.row_width);  //получаем число узлов в элементе
+	res.nodes_num = atoi(temp.c_str());
+	pos += rf.row_width;
+
+		
+	pos += rf.row_width;  // 10-ый столбец не используется
+	if (pos >(int)str.size()) { this->err = 1; return res; }
+
+	temp = str.substr(pos, rf.row_width);  //получаем id элемента
+	res.id = atoi(temp.c_str());
+	pos += rf.row_width;
+	if (pos >(int)str.size()) { this->err = 1; return res; }
+
+	int col_count = (res.nodes_num < EDGE_NODES_COL_COUNT)? res.nodes_num: EDGE_NODES_COL_COUNT;
+
+	for (int i = 0; i < col_count; ++i)
+	{
+		temp = str.substr(pos, rf.row_width);  //получаем id элемента		
+		res.vertexIDList.push_back(atoi(temp.c_str()));
+		pos += rf.row_width;
+		if (pos >(int)str.size()) { this->err = 1; return res; }
+	}
+
+	if (res.nodes_num > EDGE_NODES_COL_COUNT)  // если список узлов не помещается на 1 строчке
+	{
+		std::getline(*f, second_line);
+
+		int second_line_pos = 0;
+
+		for (int j = 0; j < res.nodes_num - EDGE_NODES_COL_COUNT; ++j)
+		{
+			temp = second_line.substr(second_line_pos, rf.row_width);  //получаем id элемента		
+			res.vertexIDList.push_back(atoi(temp.c_str()));
+			second_line_pos += rf.row_width;
+			if (second_line_pos >(int)str.size()) { this->err = 1; return res; }
+		}
+	}
 
 	return res;
 }
