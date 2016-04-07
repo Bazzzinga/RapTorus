@@ -1,0 +1,131 @@
+\hypertarget{class_database_handler}{}\section{Database\+Handler Class Reference}
+\label{class_database_handler}\index{Database\+Handler@{Database\+Handler}}
+
+
+\hyperlink{class_database_handler}{Database\+Handler} class.  
+
+
+
+
+{\ttfamily \#include $<$Database\+Handler.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_database_handler_ac27357d3431faf4fd6810483a24a43fd}{Database\+Handler} ()\hypertarget{class_database_handler_ac27357d3431faf4fd6810483a24a43fd}{}\label{class_database_handler_ac27357d3431faf4fd6810483a24a43fd}
+
+\begin{DoxyCompactList}\small\item\em Class constructor. \end{DoxyCompactList}\item 
+\hyperlink{class_database_handler_a54cc84549167c9d6a94ba686cf64a27f}{$\sim$\+Database\+Handler} ()
+\begin{DoxyCompactList}\small\item\em Class destructor. \end{DoxyCompactList}\item 
+void \hyperlink{class_database_handler_a2e07bb30c5f4658391e62fa06fa6af16}{Init} (const char $\ast$dbname)
+\begin{DoxyCompactList}\small\item\em Initializing function. \end{DoxyCompactList}\item 
+void \hyperlink{class_database_handler_a51568e235c1589bb1cb08666ba5aef71}{exec\+Query} (std\+::string query, int($\ast$callback)(void $\ast$, int, char $\ast$$\ast$, char $\ast$$\ast$), void $\ast$data)
+\begin{DoxyCompactList}\small\item\em S\+QL query execution function. \end{DoxyCompactList}\item 
+std\+::string \hyperlink{class_database_handler_a5162cd33b92072be457be57fdcc61284}{get\+Error} (void)
+\begin{DoxyCompactList}\small\item\em Error extracting function. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{class_database_handler}{Database\+Handler} class. 
+
+Holds the handle of S\+Q\+Lite3 database connection. 
+
+Definition at line 15 of file Database\+Handler.\+h.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Database\+Handler@{Database\+Handler}!````~Database\+Handler@{$\sim$\+Database\+Handler}}
+\index{````~Database\+Handler@{$\sim$\+Database\+Handler}!Database\+Handler@{Database\+Handler}}
+\subsubsection[{\texorpdfstring{$\sim$\+Database\+Handler()}{~DatabaseHandler()}}]{\setlength{\rightskip}{0pt plus 5cm}Database\+Handler\+::$\sim$\+Database\+Handler (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_database_handler_a54cc84549167c9d6a94ba686cf64a27f}{}\label{class_database_handler_a54cc84549167c9d6a94ba686cf64a27f}
+
+
+Class destructor. 
+
+Close database connection.
+
+Try closing until it\textquotesingle{}s OK.
+
+Definition at line 12 of file Database\+Handler.\+cpp.
+
+
+
+\subsection{Member Function Documentation}
+\index{Database\+Handler@{Database\+Handler}!exec\+Query@{exec\+Query}}
+\index{exec\+Query@{exec\+Query}!Database\+Handler@{Database\+Handler}}
+\subsubsection[{\texorpdfstring{exec\+Query(std\+::string query, int($\ast$callback)(void $\ast$, int, char $\ast$$\ast$, char $\ast$$\ast$), void $\ast$data)}{execQuery(std::string query, int(*callback)(void *, int, char **, char **), void *data)}}]{\setlength{\rightskip}{0pt plus 5cm}void Database\+Handler\+::exec\+Query (
+\begin{DoxyParamCaption}
+\item[{std\+::string}]{query, }
+\item[{int($\ast$)(void $\ast$, int, char $\ast$$\ast$, char $\ast$$\ast$)}]{callback, }
+\item[{void $\ast$}]{data}
+\end{DoxyParamCaption}
+)}\hypertarget{class_database_handler_a51568e235c1589bb1cb08666ba5aef71}{}\label{class_database_handler_a51568e235c1589bb1cb08666ba5aef71}
+
+
+S\+QL query execution function. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em query} & string with S\+QL query. \\
+\hline
+\mbox{\tt in}  & {\em callback} & callback function to hadle results of S\+QL query. \\
+\hline
+\mbox{\tt out}  & {\em data} & pointer to variable to hold the expected results of callback function. \\
+\hline
+\end{DoxyParams}
+a variable to hold result of sqlite3\+\_\+exec.
+
+Executing S\+QL query with native sqlite3 library function.
+
+Handling error if occurs.
+
+Definition at line 51 of file Database\+Handler.\+cpp.
+
+\index{Database\+Handler@{Database\+Handler}!get\+Error@{get\+Error}}
+\index{get\+Error@{get\+Error}!Database\+Handler@{Database\+Handler}}
+\subsubsection[{\texorpdfstring{get\+Error(void)}{getError(void)}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::string Database\+Handler\+::get\+Error (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_database_handler_a5162cd33b92072be457be57fdcc61284}{}\label{class_database_handler_a5162cd33b92072be457be57fdcc61284}
+
+
+Error extracting function. 
+
+\begin{DoxyReturn}{Returns}
+string with extracted error. Empty string if there is no error. 
+\end{DoxyReturn}
+
+
+Definition at line 77 of file Database\+Handler.\+cpp.
+
+\index{Database\+Handler@{Database\+Handler}!Init@{Init}}
+\index{Init@{Init}!Database\+Handler@{Database\+Handler}}
+\subsubsection[{\texorpdfstring{Init(const char $\ast$dbname)}{Init(const char *dbname)}}]{\setlength{\rightskip}{0pt plus 5cm}void Database\+Handler\+::\+Init (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{dbname}
+\end{DoxyParamCaption}
+)}\hypertarget{class_database_handler_a2e07bb30c5f4658391e62fa06fa6af16}{}\label{class_database_handler_a2e07bb30c5f4658391e62fa06fa6af16}
+
+
+Initializing function. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em dbname} & a path to S\+Q\+Lite3 database file. \\
+\hline
+\end{DoxyParams}
+Opening database connection with native sqlite3 library function.
+
+Definition at line 32 of file Database\+Handler.\+cpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Win32\+Project1/\+Win32\+Project1/\+Database/\hyperlink{_database_handler_8h}{Database\+Handler.\+h}\item 
+Win32\+Project1/\+Win32\+Project1/\+Database/\hyperlink{_database_handler_8cpp}{Database\+Handler.\+cpp}\end{DoxyCompactItemize}

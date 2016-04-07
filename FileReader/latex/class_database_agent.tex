@@ -1,0 +1,136 @@
+\hypertarget{class_database_agent}{}\section{Database\+Agent Class Reference}
+\label{class_database_agent}\index{Database\+Agent@{Database\+Agent}}
+
+
+\hyperlink{class_database_agent}{Database\+Agent} class.  
+
+
+
+
+{\ttfamily \#include $<$Database\+Agent.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_database_agent_af00e78928fe3bd97115d1123ed08d91c}{Database\+Agent} (const char $\ast$dbname)
+\begin{DoxyCompactList}\small\item\em Class constructor. \end{DoxyCompactList}\item 
+\hyperlink{class_database_agent_a6e201bdcbb3fd95df24d244bf101143e}{$\sim$\+Database\+Agent} ()\hypertarget{class_database_agent_a6e201bdcbb3fd95df24d244bf101143e}{}\label{class_database_agent_a6e201bdcbb3fd95df24d244bf101143e}
+
+\begin{DoxyCompactList}\small\item\em Class destructor. \end{DoxyCompactList}\item 
+void \hyperlink{class_database_agent_a21af2767f8078302a28c0e01f317e042}{exec} (std\+::string query, int($\ast$callback)(void $\ast$, int, char $\ast$$\ast$, char $\ast$$\ast$), void $\ast$data)
+\begin{DoxyCompactList}\small\item\em Function used to execute S\+QL queries. \end{DoxyCompactList}\item 
+void \hyperlink{class_database_agent_a947629f03edce06965a18e3a3726ade1}{exec\+Buffered} (std\+::string query)
+\begin{DoxyCompactList}\small\item\em Function adding S\+QL query to query buffer. \end{DoxyCompactList}\item 
+void \hyperlink{class_database_agent_a0df6a03010d2bbf11852577de324aa67}{free\+Buffer} (void)
+\begin{DoxyCompactList}\small\item\em Function to free the query buffer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{class_database_agent}{Database\+Agent} class. 
+
+Wrapper of \hyperlink{class_database_handler}{Database\+Handler} class. \begin{DoxySeeAlso}{See also}
+\hyperlink{class_database_handler}{Database\+Handler} 
+\end{DoxySeeAlso}
+
+
+Definition at line 17 of file Database\+Agent.\+h.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Database\+Agent@{Database\+Agent}!Database\+Agent@{Database\+Agent}}
+\index{Database\+Agent@{Database\+Agent}!Database\+Agent@{Database\+Agent}}
+\subsubsection[{\texorpdfstring{Database\+Agent(const char $\ast$dbname)}{DatabaseAgent(const char *dbname)}}]{\setlength{\rightskip}{0pt plus 5cm}Database\+Agent\+::\+Database\+Agent (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{dbname}
+\end{DoxyParamCaption}
+)}\hypertarget{class_database_agent_af00e78928fe3bd97115d1123ed08d91c}{}\label{class_database_agent_af00e78928fe3bd97115d1123ed08d91c}
+
+
+Class constructor. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em dbname} & the name of database file to be opened or created if not exist. \\
+\hline
+\end{DoxyParams}
+$<$ Initializing query buffer.
+
+$<$ Initializing database handler.
+
+$<$ Handling probable error.
+
+Creating database tables if needed.
+
+Definition at line 11 of file Database\+Agent.\+cpp.
+
+
+
+\subsection{Member Function Documentation}
+\index{Database\+Agent@{Database\+Agent}!exec@{exec}}
+\index{exec@{exec}!Database\+Agent@{Database\+Agent}}
+\subsubsection[{\texorpdfstring{exec(std\+::string query, int($\ast$callback)(void $\ast$, int, char $\ast$$\ast$, char $\ast$$\ast$), void $\ast$data)}{exec(std::string query, int(*callback)(void *, int, char **, char **), void *data)}}]{\setlength{\rightskip}{0pt plus 5cm}void Database\+Agent\+::exec (
+\begin{DoxyParamCaption}
+\item[{std\+::string}]{query, }
+\item[{int($\ast$)(void $\ast$, int, char $\ast$$\ast$, char $\ast$$\ast$)}]{callback, }
+\item[{void $\ast$}]{data}
+\end{DoxyParamCaption}
+)}\hypertarget{class_database_agent_a21af2767f8078302a28c0e01f317e042}{}\label{class_database_agent_a21af2767f8078302a28c0e01f317e042}
+
+
+Function used to execute S\+QL queries. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em query} & string with S\+QL query to be executed. \\
+\hline
+\mbox{\tt in}  & {\em callback} & callback function to process the result of executed S\+QL query. \\
+\hline
+\mbox{\tt out}  & {\em data} & pointer to variable that will be passed to callback function to hold S\+QL query result. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 47 of file Database\+Agent.\+cpp.
+
+\index{Database\+Agent@{Database\+Agent}!exec\+Buffered@{exec\+Buffered}}
+\index{exec\+Buffered@{exec\+Buffered}!Database\+Agent@{Database\+Agent}}
+\subsubsection[{\texorpdfstring{exec\+Buffered(std\+::string query)}{execBuffered(std::string query)}}]{\setlength{\rightskip}{0pt plus 5cm}void Database\+Agent\+::exec\+Buffered (
+\begin{DoxyParamCaption}
+\item[{std\+::string}]{query}
+\end{DoxyParamCaption}
+)}\hypertarget{class_database_agent_a947629f03edce06965a18e3a3726ade1}{}\label{class_database_agent_a947629f03edce06965a18e3a3726ade1}
+
+
+Function adding S\+QL query to query buffer. 
+
+Use of this function highly increase speed of the program because S\+Q\+Lite3 database is optimized for transactions that include a number of S\+QL queries. 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em query} & S\+QL query string. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 57 of file Database\+Agent.\+cpp.
+
+\index{Database\+Agent@{Database\+Agent}!free\+Buffer@{free\+Buffer}}
+\index{free\+Buffer@{free\+Buffer}!Database\+Agent@{Database\+Agent}}
+\subsubsection[{\texorpdfstring{free\+Buffer(void)}{freeBuffer(void)}}]{\setlength{\rightskip}{0pt plus 5cm}void Database\+Agent\+::free\+Buffer (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_database_agent_a0df6a03010d2bbf11852577de324aa67}{}\label{class_database_agent_a0df6a03010d2bbf11852577de324aa67}
+
+
+Function to free the query buffer. 
+
+This function creates a S\+Q\+Lite3 transaction that include all S\+QL queries from query buffer. 
+
+Definition at line 72 of file Database\+Agent.\+cpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Win32\+Project1/\+Win32\+Project1/\+Database/\hyperlink{_database_agent_8h}{Database\+Agent.\+h}\item 
+Win32\+Project1/\+Win32\+Project1/\+Database/\hyperlink{_database_agent_8cpp}{Database\+Agent.\+cpp}\end{DoxyCompactItemize}

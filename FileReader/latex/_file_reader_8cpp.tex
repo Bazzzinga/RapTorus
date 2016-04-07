@@ -1,0 +1,55 @@
+\hypertarget{_file_reader_8cpp}{}\section{Win32\+Project1/\+Win32\+Project1/\+File\+Reader.cpp File Reference}
+\label{_file_reader_8cpp}\index{Win32\+Project1/\+Win32\+Project1/\+File\+Reader.\+cpp@{Win32\+Project1/\+Win32\+Project1/\+File\+Reader.\+cpp}}
+{\ttfamily \#include \char`\"{}stdafx.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$iostream$>$}\\*
+{\ttfamily \#include $<$conio.\+h$>$}\\*
+{\ttfamily \#include $<$string$>$}\\*
+{\ttfamily \#include $<$chrono$>$}\\*
+{\ttfamily \#include $<$ratio$>$}\\*
+{\ttfamily \#include \char`\"{}F\+Reader.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Database\textbackslash{}\+Database\+Agent.\+h\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{_file_reader_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Main project function. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{File\+Reader.\+cpp@{File\+Reader.\+cpp}!main@{main}}
+\index{main@{main}!File\+Reader.\+cpp@{File\+Reader.\+cpp}}
+\subsubsection[{\texorpdfstring{main(int argc, char $\ast$argv[])}{main(int argc, char *argv[])}}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+\item[{int}]{argc, }
+\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{_file_reader_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{}\label{_file_reader_8cpp_a0ddf1224851353fc92bfbff6f499fa97}
+
+
+Main project function. 
+
+Argument format (can be used in any order)\+:~\newline
+ -\/f -\/ path to the file to be opened. Required parameter.~\newline
+-\/t -\/ desired database file extension. Optional parameter. Default value is \char`\"{}pdb\char`\"{}.~\newline
+ -\/p -\/ desired database path. Optional parameter. Default value is \char`\"{}\textbackslash{}\char`\"{}. 
+\begin{DoxyParams}{Parameters}
+{\em argc} & default main function parameter -\/ defines size of argv array. \\
+\hline
+{\em argv} & default main function parameter -\/ array of input parameters. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+integer result\+: 0 -\/ if everything is OK, not 0 if there is a problem. 
+\end{DoxyReturn}
+extracting parameters from command line argv\mbox{[}0\mbox{]} -\/ path to current .exe file
+
+looking for \textquotesingle{}.\textquotesingle{} in string to get separated file name and file extention
+
+checking file extention for wrong symbols
+
+Creating database wrapper.
+
+Reading mesh file to database.
+
+Definition at line 23 of file File\+Reader.\+cpp.
+

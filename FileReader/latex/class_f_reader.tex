@@ -1,0 +1,185 @@
+\hypertarget{class_f_reader}{}\section{F\+Reader Class Reference}
+\label{class_f_reader}\index{F\+Reader@{F\+Reader}}
+
+
+\hyperlink{class_f_reader}{F\+Reader} class.  
+
+
+
+
+{\ttfamily \#include $<$F\+Reader.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_f_reader_aa55d84e221cf8cfa66ac5e692ae5c994}{F\+Reader} (const char $\ast$fn, \hyperlink{class_database_agent}{Database\+Agent} $\ast$\+\_\+dba)
+\begin{DoxyCompactList}\small\item\em Class constructor. \end{DoxyCompactList}\item 
+\hyperlink{class_f_reader_aca652fd77d9796535f920496e3329083}{$\sim$\+F\+Reader} ()
+\begin{DoxyCompactList}\small\item\em Class destructor. \end{DoxyCompactList}\item 
+\hyperlink{_file_structs_8h_ae183556f32e14e06d49b270ca950d90a}{F\+R\+\_\+\+E\+R\+R\+OR} \hyperlink{class_f_reader_abd5dae242af5ba546df2e27acf1644e9}{get\+Error} (void)
+\begin{DoxyCompactList}\small\item\em Get error function. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{class_f_reader}{F\+Reader} class. 
+
+Main class of current solution. Handles .C\+DB mesh file format. 
+
+Definition at line 36 of file F\+Reader.\+h.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{F\+Reader@{F\+Reader}!F\+Reader@{F\+Reader}}
+\index{F\+Reader@{F\+Reader}!F\+Reader@{F\+Reader}}
+\subsubsection[{\texorpdfstring{F\+Reader(const char $\ast$fn, Database\+Agent $\ast$\+\_\+dba)}{FReader(const char *fn, DatabaseAgent *_dba)}}]{\setlength{\rightskip}{0pt plus 5cm}F\+Reader\+::\+F\+Reader (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{fn, }
+\item[{{\bf Database\+Agent} $\ast$}]{\+\_\+dba}
+\end{DoxyParamCaption}
+)}\hypertarget{class_f_reader_aa55d84e221cf8cfa66ac5e692ae5c994}{}\label{class_f_reader_aa55d84e221cf8cfa66ac5e692ae5c994}
+
+
+Class constructor. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em fn} & mesh file name. \\
+\hline
+\mbox{\tt in}  & {\em \+\_\+dba} & database connection handle. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{class_database_agent}{Database\+Agent} 
+\end{DoxySeeAlso}
+Open input file.
+
+Variable to store read line.
+
+Initializing class variables
+
+Evaluating md5 hash of input file.
+
+Checking if the database is already filled and extract md5 hash of the file that was translated to database.
+
+If database is outdated it should be emptied.
+
+Input file structure (C\+DB)\+:
+\begin{DoxyItemize}
+\item Some unused information.
+\item Row starting with \char`\"{}\+N\+B\+L\+O\+C\+K\char`\"{} -\/ begin of node information block. Next row contains format of information table. Format is (XiY,Ze\+U.\+W). Where X -\/ the number of first left columns. Y -\/ width of these columns. Z -\/ the number of columns with floating-\/point numbers (first 3 -\/ node coordinates, last 3 -\/ rotating angles). If row consist of less than Z columns the rest are taken as zeros. U -\/ width of these columns. W -\/ precision. The block ends with \char`\"{}\+N,\+R5.\+3,\+L\+O\+C,  -\/1\{,\}\char`\"{} row.
+\item Row starting with \char`\"{}\+E\+B\+L\+O\+C\+K\char`\"{} -\/ begin of element information block. Next row contains format of information table. Format is (XiY) -\/ like N\+B\+L\+O\+CK fromat. Every row has not more than X columns, the rest are on the next line. The block ends with \char`\"{}-\/1\char`\"{} row.
+\end{DoxyItemize}
+
+Counting number of rows in node infortaion table.
+
+Node block information started.
+
+Extracting model type.
+
+Writing model type into database.
+
+Getting model ID, witch was assigned to the model.
+
+Extracting next line of input file, that must contain information table format.
+
+Checking if format line is correct.
+
+Saving table format into variable. \begin{DoxySeeAlso}{See also}
+\hyperlink{struct__row_format_s}{\+\_\+row\+FormatS}
+\end{DoxySeeAlso}
+Reading node information line by line from input file.
+
+Checking if we came to the end of current block.
+
+Parsing single row of information table and translating it into \hyperlink{struct___node_s}{\+\_\+\+NodeS} variable. \begin{DoxySeeAlso}{See also}
+\hyperlink{struct___node_s}{\+\_\+\+NodeS} 
+
+parse\+Node\+Row()
+\end{DoxySeeAlso}
+Adding extracted node to node list. \begin{DoxySeeAlso}{See also}
+\+\_\+\+V\+S\+Node
+\end{DoxySeeAlso}
+Adding extracted node to database query buffer. \begin{DoxySeeAlso}{See also}
+push\+Node\+To\+D\+B()
+\end{DoxySeeAlso}
+Free database command buffer to execute all pending database queries.
+
+Creating support data structure for fast node access. \begin{DoxySeeAlso}{See also}
+node\+I\+Ds
+\end{DoxySeeAlso}
+Creating support data structure to store edges, giving fast access to the edges without interaction with the database.
+
+Mesh elements block information started.
+
+Extracting next line of input file, that must contain information table format.
+
+Checking if format line is correct.
+
+Saving table format into variable. \begin{DoxySeeAlso}{See also}
+\hyperlink{struct__row_format_s}{\+\_\+row\+FormatS}
+\end{DoxySeeAlso}
+Reading mesh element information line by line from input file.
+
+Checking if we came to the end of current block.
+
+Parsing single row of information table and translating it into \hyperlink{struct___node_s}{\+\_\+\+NodeS} variable. \begin{DoxySeeAlso}{See also}
+\hyperlink{struct___elements_s}{\+\_\+\+ElementsS} 
+
+parse\+Element\+Row()
+\end{DoxySeeAlso}
+Adding extracted element to database query buffer. \begin{DoxySeeAlso}{See also}
+push\+Element\+To\+D\+B()
+\end{DoxySeeAlso}
+Parsing extracted element in order to get edges and faces it consist of. \begin{DoxySeeAlso}{See also}
+parse\+Element\+To\+Edges\+And\+Faces()
+\end{DoxySeeAlso}
+Closing input file.
+
+Definition at line 130 of file F\+Reader.\+cpp.
+
+\index{F\+Reader@{F\+Reader}!````~F\+Reader@{$\sim$\+F\+Reader}}
+\index{````~F\+Reader@{$\sim$\+F\+Reader}!F\+Reader@{F\+Reader}}
+\subsubsection[{\texorpdfstring{$\sim$\+F\+Reader()}{~FReader()}}]{\setlength{\rightskip}{0pt plus 5cm}F\+Reader\+::$\sim$\+F\+Reader (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_f_reader_aca652fd77d9796535f920496e3329083}{}\label{class_f_reader_aca652fd77d9796535f920496e3329083}
+
+
+Class destructor. 
+
+Free all created with \char`\"{}new\char`\"{} command arrays\+: Two dimensional array node\+I\+Ds and array \+\_\+\+Edges\+List.
+
+Definition at line 391 of file F\+Reader.\+cpp.
+
+
+
+\subsection{Member Function Documentation}
+\index{F\+Reader@{F\+Reader}!get\+Error@{get\+Error}}
+\index{get\+Error@{get\+Error}!F\+Reader@{F\+Reader}}
+\subsubsection[{\texorpdfstring{get\+Error(void)}{getError(void)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf F\+R\+\_\+\+E\+R\+R\+OR} F\+Reader\+::get\+Error (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_f_reader_abd5dae242af5ba546df2e27acf1644e9}{}\label{class_f_reader_abd5dae242af5ba546df2e27acf1644e9}
+
+
+Get error function. 
+
+\begin{DoxyReturn}{Returns}
+error code. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{_file_structs_8h_ae183556f32e14e06d49b270ca950d90a}{F\+R\+\_\+\+E\+R\+R\+OR} 
+\end{DoxySeeAlso}
+
+
+Definition at line 1344 of file F\+Reader.\+cpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Win32\+Project1/\+Win32\+Project1/\hyperlink{_f_reader_8h}{F\+Reader.\+h}\item 
+Win32\+Project1/\+Win32\+Project1/\hyperlink{_f_reader_8cpp}{F\+Reader.\+cpp}\end{DoxyCompactItemize}
