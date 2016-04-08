@@ -22,7 +22,9 @@ void \hyperlink{class_database_agent_a21af2767f8078302a28c0e01f317e042}{exec} (s
 void \hyperlink{class_database_agent_a947629f03edce06965a18e3a3726ade1}{exec\+Buffered} (std\+::string query)
 \begin{DoxyCompactList}\small\item\em Function adding S\+QL query to query buffer. \end{DoxyCompactList}\item 
 void \hyperlink{class_database_agent_a0df6a03010d2bbf11852577de324aa67}{free\+Buffer} (void)
-\begin{DoxyCompactList}\small\item\em Function to free the query buffer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Function to free the query buffer. \end{DoxyCompactList}\item 
+std\+::string \hyperlink{class_database_agent_a8305f1e19cb08ff19ce88a9ec3735162}{get\+Error} (void)
+\begin{DoxyCompactList}\small\item\em Get error function. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -91,7 +93,7 @@ Function used to execute S\+QL queries.
 \end{DoxyParams}
 
 
-Definition at line 47 of file Database\+Agent.\+cpp.
+Definition at line 48 of file Database\+Agent.\+cpp.
 
 \index{Database\+Agent@{Database\+Agent}!exec\+Buffered@{exec\+Buffered}}
 \index{exec\+Buffered@{exec\+Buffered}!Database\+Agent@{Database\+Agent}}
@@ -111,7 +113,7 @@ Use of this function highly increase speed of the program because S\+Q\+Lite3 da
 \end{DoxyParams}
 
 
-Definition at line 57 of file Database\+Agent.\+cpp.
+Definition at line 58 of file Database\+Agent.\+cpp.
 
 \index{Database\+Agent@{Database\+Agent}!free\+Buffer@{free\+Buffer}}
 \index{free\+Buffer@{free\+Buffer}!Database\+Agent@{Database\+Agent}}
@@ -126,7 +128,30 @@ Function to free the query buffer.
 
 This function creates a S\+Q\+Lite3 transaction that include all S\+QL queries from query buffer. 
 
-Definition at line 72 of file Database\+Agent.\+cpp.
+Definition at line 73 of file Database\+Agent.\+cpp.
+
+\index{Database\+Agent@{Database\+Agent}!get\+Error@{get\+Error}}
+\index{get\+Error@{get\+Error}!Database\+Agent@{Database\+Agent}}
+\subsubsection[{\texorpdfstring{get\+Error(void)}{getError(void)}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::string Database\+Agent\+::get\+Error (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_database_agent_a8305f1e19cb08ff19ce88a9ec3735162}{}\label{class_database_agent_a8305f1e19cb08ff19ce88a9ec3735162}
+
+
+Get error function. 
+
+\begin{DoxyReturn}{Returns}
+error string.
+
+error code. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{_file_structs_8h_ae183556f32e14e06d49b270ca950d90a}{F\+R\+\_\+\+E\+R\+R\+OR} 
+\end{DoxySeeAlso}
+
+
+Definition at line 87 of file Database\+Agent.\+cpp.
 
 
 
