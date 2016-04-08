@@ -13,7 +13,8 @@ DatabaseAgent::DatabaseAgent(const char* dbname)
 	queryBuffer.append(c_beginTransactionQuery); /**< Initializing query buffer. */
 	_dbh.Init(dbname); /**< Initializing database handler. */
 	
-	if ((int)_dbh.getError().size() != 0)  /**< Handling  probable error. */
+	this->err = _dbh.getError();
+	if ((int)this->err.size() != 0)  /**< Handling  probable error. */
 		return;
 
 	/**
@@ -76,4 +77,14 @@ void DatabaseAgent::freeBuffer(void)
 	bufferQueryCount = 0;
 	queryBuffer.clear();
 	queryBuffer.append(c_beginTransactionQuery);
+}
+
+/**
+* Get error function.
+* @return error code.
+* @see FR_ERROR
+*/
+std::string DatabaseAgent::getError(void)
+{
+	return this->err;
 }

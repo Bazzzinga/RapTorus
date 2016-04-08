@@ -14,7 +14,7 @@
 /**
 * Main project function. Argument format (can be used in any order):\n
 * -f - path to the file to be opened. Required parameter.\n
-*-t - desired database file extension. Optional parameter. Default value is "pdb".\n
+* -t - desired database file extension. Optional parameter. Default value is "pdb".\n
 * -p - desired database path. Optional parameter. Default value is "\".
 * @param argc default main function parameter - defines size of argv array.
 * @param argv default main function parameter - array of input parameters. 
@@ -26,10 +26,9 @@ int main(int argc, char *argv[])
 	std::string file;
 	std::string fileExt;
 	std::string fileName;
-	std::string filePath;
 	std::string databasePath = DEFAULT_DATABASE_FILE_PATH;
 	std::string databaseFileExt = DEFAULT_DATABASE_FILE_TYPE;
-
+	
 	if (argc < 3)
 	{
 		std::cout << "Not enough parameters. Read documentation!\n\n";
@@ -70,7 +69,6 @@ int main(int argc, char *argv[])
 			/**
 			 * checking file extention for wrong symbols
 			 */
-
 			for (int j = 0; j < (int)fileExt.size(); ++j)
 				if ( !( ( (fileExt[j] >= 'a') && (fileExt[j] <= 'z') ) || ( (fileExt[j] >= 'A') && (fileExt[j] <= 'Z') ) ) )
 				{
@@ -78,10 +76,9 @@ int main(int argc, char *argv[])
 					return 1;
 				}
 
-			int nameStart = (int)fileName.find('/');
+			std::size_t nameStart = file.find_last_of("/\\");
 
-			filePath = file.substr(0, (int)file.size() - (int)fileExt.size() - 1);
-			fileName = file.substr(nameStart + 1, (int)file.size() - (int)fileExt.size() - 1);
+			fileName = file.substr(nameStart + 1, (int)file.size() - (int)fileExt.size() - (int)nameStart - 2);
 					
 		}
 		else if (std::string(argv[i]).compare("-t") == 0)
@@ -109,6 +106,12 @@ int main(int argc, char *argv[])
 	 */
 	DatabaseAgent DBH(databasePath.append(fileName).append(".").append(databaseFileExt).c_str());
 
+	std::string dbErr = DBH.getError();
+	if ((int)dbErr.size() != 0)
+	{
+		std::cout << "Error opening or creating database!\n";
+		return 0;
+	}
 	/**
 	 * Reading mesh file to database.
 	 */
@@ -131,7 +134,7 @@ int main(int argc, char *argv[])
 	auto timestamp2 = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double, std::milli> duration = timestamp2 - timestamp1;
 
-	std::cout << "File " << file.c_str() << " was successfully converted into database " << databasePath << " in " << duration.count() / 1000 << " s";
+	std::cout << "File \"" << file.c_str() << "\" was successfully converted into database \"" << databasePath << "\" in " << duration.count() / 1000 << " s";
     return 0;
 }
 

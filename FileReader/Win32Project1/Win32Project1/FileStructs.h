@@ -115,11 +115,12 @@ struct _checkFaceResultS
 
 /**
  * An enum.
- * Contains identificaotrs of file reading errors.
+ * Contains identificators of probable module errors.
  */
 enum FR_ERROR
 {
 	ERR_NO_ERR,				/**< No error. */
 	ERR_OPEN,				/**< Error opening file. */
-	ERR_WRONG_FILE_FORMAT	/**< Wrong input file format. */
+	ERR_WRONG_FILE_FORMAT,	/**< Wrong input file format. */
+	ERR_OPENDB				/**< Error opening database. */
 };

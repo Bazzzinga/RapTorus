@@ -17,7 +17,7 @@ class DatabaseHandler
 private:
 	sqlite3 * dbh = 0;		/**< database connection handle pointer.	*/
 
-	std::string err = "";	/**< databaseHandler error description string.	*/
+	std::string err = "";	/**< DatabaseHandler error description string.	*/
 
 	char* sqlerr;			/**< SQLite error.	*/
 

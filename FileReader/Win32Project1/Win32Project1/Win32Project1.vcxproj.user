@@ -4,12 +4,13 @@
     <LocalDebuggerEnvironment>PATH=%PATH%;$(ProjectDir)\Database\sqlite
 $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>-f TETRAQUAD.cdb</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-f ../../../../meshes/TETRAQUAD.cdb -t rtdb -p Database1/</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LocalDebuggerEnvironment>PATH=%PATH%
 $(ProjectDir)Database\sqlite
 $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>-f ../../../../meshes/TETRAQUAD.cdb -t rtdb -p Database1/</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>

@@ -23,6 +23,8 @@ private:
 
 	std::string queryBuffer = "";	/**< string variable keeping query buffer.	*/
 
+	std::string err;				/**< databaseAgent error description string.	*/
+
 public:
 
 	/**
@@ -56,4 +58,10 @@ public:
 	* This function creates a SQLite3 transaction that include all SQL queries from query buffer.
 	*/
 	void freeBuffer(void);
+
+	/**
+	* Get error function.
+	* @return error string.
+	*/
+	std::string getError(void);
 };
