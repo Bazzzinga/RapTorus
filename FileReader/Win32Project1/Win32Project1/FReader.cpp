@@ -1036,7 +1036,7 @@ bool FReader::checkEdgeInList(unsigned int v_from, unsigned int v_to)
 		return false;
 
 	/**
-	* Looking for v_to node in 
+	* Looking for v_to node in v_from neighbours
 	*/
 	for (int i = 0; i < (int)_EdgesList[index].size(); ++i)
 		if (_EdgesList[index][i] == v_to)
@@ -1058,7 +1058,8 @@ void FReader::addToEdgeList(unsigned int v_from, unsigned int v_to)
 	if (!checkEdgeInList(v_from, v_to))
 	{
 		_EdgesList[getNodeIndex(v_from)].push_back(v_to);
-		pushEdgeToDB(v_from, v_to);
+		if(!checkEdgeInList(v_to, v_from))
+			pushEdgeToDB(v_from, v_to);
 	}
 }
 
