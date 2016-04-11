@@ -260,10 +260,14 @@ private:
 	/**
 	* function adding face to buffer for adding to database.
 	* @param[in] f face to be added.
-	* @param[in] elementID ID of the element that face belongs to.
 	* @see _FacesS
 	*/
-	void pushFaceToDB(_FacesS f, int elementID);
+	void pushFaceToDB(_FacesS fD);
+
+	/**
+	* function adding all faces from face buffer to database.
+	*/
+	void pushFaceListToDB();
 
 	/**
 	* function adding face node to buffer for adding to database.

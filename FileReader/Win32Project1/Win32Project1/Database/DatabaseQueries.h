@@ -42,6 +42,6 @@ const std::string c_selectFaceByKey = "SELECT FaceID FROM Faces WHERE (internal 
 
 const std::string c_updateFaceInternal = "UPDATE Faces SET internal = 1 WHERE FaceID = %d";
 
-const std::string c_insertFace = "INSERT INTO Faces (FaceID, ElementID, internal, FaceKey) VALUES (%d, %d, 0, %Q)";
+const std::string c_insertFace = "INSERT INTO Faces (FaceID, ElementID, internal, FaceKey) VALUES (%d, %d, %d, %Q)";
 
 const std::string c_insertFaceNode = "INSERT INTO FaceNodes (FaceID, NodeID) VALUES (%d, %d)";

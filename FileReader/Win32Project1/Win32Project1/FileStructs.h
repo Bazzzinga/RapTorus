@@ -96,6 +96,7 @@ struct _FacesS
 
 	bool internal = false;	/**< Flag showing if this face is internal or not. */
 
+	short elementID;		/**< Corresponding element ID. */
 	/**
 	 * List of IDs of nodes defining this face.
 	 * Node IDs are place according to right-hand rule.

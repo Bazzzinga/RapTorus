@@ -373,6 +373,8 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 				}
 				else { this->err = ERR_WRONG_FILE_FORMAT; return; }
 			} while (!end);
+
+			pushFaceListToDB();
 		}
 						
 	}
@@ -1196,10 +1198,9 @@ void FReader::updateFaceInternal(int faceID)
 /**
 * function adding face to buffer for adding to database.
 * @param[in] f face to be added.
-* @param[in] elementID ID of the element that face belongs to.
 * @see _FacesS
 */
-void FReader::pushFaceToDB(_FacesS f, int elementID)
+void FReader::pushFaceToDB(_FacesS f)
 {
 	/**
 	* Calculating a face key for database query.
@@ -1208,7 +1209,7 @@ void FReader::pushFaceToDB(_FacesS f, int elementID)
 	key_s.append(std::to_string(f.faceKey.v1)).append(".").append(std::to_string(f.faceKey.v2)).append(".").append(std::to_string(f.faceKey.v3)).append(".").append(std::to_string(f.faceKey.v4));
 
 
-	char * sqlQuery = sqlite3_mprintf(c_insertFace.c_str(), f.id, elementID, key_s.c_str());
+	char * sqlQuery = sqlite3_mprintf(c_insertFace.c_str(), f.id, f.elementID, f.internal?1:0, key_s.c_str());
 
 	dba->execBuffered(std::string(sqlQuery));
 
@@ -1272,6 +1273,8 @@ void FReader::addToFaceList(std::vector<int> nodeIDList, int elementID)
 		std::sort(nodeIDList.begin(), nodeIDList.end());
 
 		temp.faceKey = convertVectorToFaceKeyS(nodeIDList);
+		
+		temp.elementID = elementID;
 
 		_FacesList.push_back(temp);
 
@@ -1279,14 +1282,20 @@ void FReader::addToFaceList(std::vector<int> nodeIDList, int elementID)
 		 * If face buffers list has reached its maximum size than empty it, writing all its items into database.
 		 */
 		if ((int)_FacesList.size() >= FACE_LIST_MAX_SIZE)
-		{
-			for (int i = 0; i < (int)_FacesList.size(); ++i)
-				pushFaceToDB(_FacesList[i], elementID);
-
-			dba->freeBuffer();
-			_FacesList.clear();
-		}
+			pushFaceListToDB();
 	}
+}
+
+/**
+* function adding all faces from face buffer to database.
+*/
+void FReader::pushFaceListToDB()
+{
+	for (int i = 0; i < (int)_FacesList.size(); ++i)
+		pushFaceToDB(_FacesList[i]);
+
+	dba->freeBuffer();
+	_FacesList.clear();
 }
 
 /**
@@ -1333,7 +1342,9 @@ void FReader::addQuadFacesToFaceList(_ElementsS elem, int faces[][4], int n)
 		 * Singularity check.
 		 */		
 		if( !( (temp[0] == temp[2]) || (temp[1] == temp[3]) ) )
-			addToFaceList(temp, elem.id);
+			if(!( (temp[0] == temp[1]) && (temp[2] == temp[3])) )
+				if (!((temp[0] == temp[3]) && (temp[2] == temp[1])))
+					addToFaceList(temp, elem.id);
 	}
 }
 
