@@ -4,7 +4,7 @@ var indexSectionsWithContent =
   1: "_df",
   2: "def",
   3: "cdefgimo~",
-  4: "acfilmnprstvx",
+  4: "acefilmnprstvx",
   5: "f",
   6: "ce",
   7: "defmq"

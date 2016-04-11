@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['section',['section',['../struct___elements_s.html#a76160d7f046c6435586e878eb1ec93b4',1,'_ElementsS']]],
-  ['shape',['shape',['../struct___elements_s.html#aff93e58a2996c7dcae7441a7d6804da0',1,'_ElementsS']]],
-  ['solid_5fentity',['solid_entity',['../struct___node_s.html#a9ded714a4c7575d4dc9c721f8560f861',1,'_NodeS']]],
-  ['solid_5fline_5flocation',['solid_line_location',['../struct___node_s.html#a486190cb5907d2695e87793dce313bbf',1,'_NodeS']]]
+  ['reference',['reference',['../struct___elements_s.html#af9fa947d626f4bcdcb030fe4fab611c4',1,'_ElementsS']]],
+  ['row_5fnum',['row_num',['../struct__row_format_s.html#ac7451588121fa109b772db97b509e734',1,'_rowFormatS']]],
+  ['row_5fwidth',['row_width',['../struct__row_format_s.html#a4f667918f753a059f84301db23d70e68',1,'_rowFormatS']]]
 ];

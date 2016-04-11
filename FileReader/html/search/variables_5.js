@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['material',['material',['../struct___elements_s.html#ac64ee48e51f13b1e7aabb9b6a48cb726',1,'_ElementsS']]]
+  ['life_5fflag',['life_flag',['../struct___elements_s.html#a966797bc046fea5472386a7a67867376',1,'_ElementsS']]]
 ];
