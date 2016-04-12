@@ -6,6 +6,9 @@
 
 #define MAX_NUM_OF_NODE_COLS 8  /**< Maximum number of columns in elements' first row in element block. */
 
+#define NAMED_SET_TYPE_NODE 0	/**< Nodal type of named sets identificator */   
+#define NAMED_SET_TYPE_ELEM 1	/**< Elemental type of named sets identificator */ 
+
 /**
  * An enum.
  * Contains identificators of different blocks of input file.
@@ -109,4 +112,18 @@ enum FR_ERROR
 	ERR_OPEN,				/**< Error opening file. */
 	ERR_WRONG_FILE_FORMAT,	/**< Wrong input file format. */
 	ERR_OPENDB				/**< Error opening database. */
+};
+
+/**
+* A structure.
+* Structure for named set.
+*/
+struct _NamedSetS
+{
+	int SetID;				/**< Set ID. */
+	std::string name;		/**< Set name. */
+	int type;				/**< Set type. */
+	int itemCount;			/**< Number of items in set. */	
+
+	std::vector<unsigned int> itemList;	/**< List of set items IDs. */
 };

@@ -55,7 +55,9 @@ private:
 
 	DatabaseAgent * dba;							/**< pointer to database handle.	*/ 
 
-	int lastFaceID = 0;								/**< variable of last given face ID. Used to give all faces unique ID.	*/
+	int lastFaceID = 0;								/**< variable of last given face ID. Used to give all faces unique IDs.	*/
+
+	int lastNamedSetID = 0;							/**< variable of last given named set ID. Used to give all named sets unique IDs.	*/
 
 	/**
 	* function to check if string of block format is correct.

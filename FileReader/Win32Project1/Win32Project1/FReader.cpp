@@ -378,7 +378,103 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 
 			pushFaceListToDB();
 		}
+
+		/**
+		* Named sets block information started.
+		*/
+		if (line.compare(0, 7, "CMBLOCK") == 0)
+		{
+			bool end = false;
+
+			_NamedSetS nSet;
+
+			++lastNamedSetID;
+
+			nSet.SetID = lastNamedSetID;
 						
+			std::string tempStr;
+			int tempInt;
+
+			if ((int)line.length() <= 16) { this->err = ERR_WRONG_FILE_FORMAT; return; }
+
+			tempStr = line.substr(8, (int)line.length() - 8);
+
+			tempInt = tempStr.find(',');
+
+			if(tempInt < 0) { this->err = ERR_WRONG_FILE_FORMAT; return; }
+
+			
+			nSet.name = tempStr.substr(0, tempInt);
+
+			if((int)tempStr.length() <= tempInt + 1) { this->err = ERR_WRONG_FILE_FORMAT; return; }
+
+			tempStr = tempStr.substr(tempInt + 1, (int)tempStr.length() - (int)nSet.name.length() - 1);
+
+			if (tempStr[0] == 'N')
+			{				
+				nSet.type = NAMED_SET_TYPE_NODE;
+				
+				if((int)tempStr.length() <= 5) { this->err = ERR_WRONG_FILE_FORMAT; return; }
+				
+				nSet.itemCount = atoi(tempStr.substr(5, (int)tempStr.length() - 5).c_str());
+			}
+			else if (tempStr[0] == 'E')
+			{
+				nSet.type = NAMED_SET_TYPE_ELEM;
+
+				if ((int)tempStr.length() <= 8) { this->err = ERR_WRONG_FILE_FORMAT; return; }
+								
+				nSet.itemCount = atoi(tempStr.substr(8, (int)tempStr.length() - 8).c_str());
+			}
+			else {this->err = ERR_WRONG_FILE_FORMAT; return;}
+
+			std::string eb_format_line;
+
+			/**
+			* Extracting next line of input file, that must contain information table format.
+			*/
+			if (!std::getline(f, eb_format_line))
+			{
+				this->err = ERR_WRONG_FILE_FORMAT; return;
+			}
+
+			/**
+			* Checking if format line is correct.
+			*/
+			bool res = checkBlockFormat(eb_format_line, "[(]([[:digit:]]+)i([[:digit:]]+)[)]");
+			if (!res) { this->err = ERR_WRONG_FILE_FORMAT; return; }
+
+			_rowFormatS rowFormat = parseElementBlockFormat(eb_format_line);
+
+			std::string nb_line;
+			
+			for (int ii = 0; ii < nSet.itemCount; ++ii)
+			{
+				if ((ii % rowFormat.row_num == 0) && (!std::getline(f, nb_line))) { this->err = ERR_WRONG_FILE_FORMAT; return; }
+				
+				int itemID = atoi(nb_line.substr(0, rowFormat.row_width).c_str());
+
+				bool negative = (itemID < 0);
+
+				if (negative)
+					itemID *= -1;
+
+				nb_line = nb_line.substr(rowFormat.row_width, (int)nb_line.length() - rowFormat.row_width);
+
+				nSet.itemList.push_back(itemID);
+			}
+
+			char * sqlQueryNS = sqlite3_mprintf(c_insertNamedSet.c_str(), nSet.SetID, nSet.name.c_str(), nSet.type, nSet.itemCount, this->modelID);
+			dba->execBuffered(sqlQueryNS);
+			sqlite3_free(sqlQueryNS);
+
+			for (int jj = 0; jj < nSet.itemCount; ++jj)
+			{
+				char * sqlQueryNSI = sqlite3_mprintf(c_insertNamedSetItem.c_str(), nSet.SetID, nSet.itemList[jj]);
+				dba->execBuffered(sqlQueryNSI);
+				sqlite3_free(sqlQueryNSI);
+			}
+		}						
 	}
 
 	/**

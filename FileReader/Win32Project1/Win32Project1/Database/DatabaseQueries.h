@@ -20,13 +20,17 @@ const std::string c_facesTableCreationQuery = "CREATE TABLE IF NOT EXISTS Faces 
 
 const std::string c_faceNodesTableCreationQuery = "CREATE TABLE IF NOT EXISTS FaceNodes (FaceID INTEGER REFERENCES Faces (FaceID) ON DELETE CASCADE, NodeID INTEGER REFERENCES Nodes (NodeID)  ON DELETE CASCADE);";
 
+const std::string c_NamedSetsTableCreationQuery = "CREATE TABLE IF NOT EXISTS NamedSets (SetID INTEGER PRIMARY KEY, Name VARCHAR (50), Type INTEGER, ItemCount INTEGER, ModelID REFERENCES Model (ModelID) ON DELETE CASCADE);";
+
+const std::string c_NamedSetItemsTableCreationQuery = "CREATE TABLE NamedSetItems (SetID INTEGER REFERENCES NamedSets (SetID), ItemID INTEGER);";
+
 const std::string c_selectModelHash = "SELECT ModelHash FROM Model";
 
 const std::string c_selectModelID = "SELECT ModelID FROM Model";
 
 const std::string c_clearAllTables = "DELETE FROM Model; DELETE FROM Nodes; DELETE FROM Elements; DELETE FROM ElementNodes; DELETE FROM Edges; DELETE FROM Faces; DELETE FROM FaceNodes; VACUUM;";
 
-const std::string c_inputModel = "INSERT INTO Model (ModelType, ModelHash) VALUES (%d, '')";
+const std::string c_inputModel = "INSERT INTO Model (ModelType, ModelHash) VALUES (%d, '--')";
 
 const std::string c_updateModelHash = "UPDATE Model SET ModelHash=%Q WHERE ModelID=%d";
 
@@ -47,3 +51,7 @@ const std::string c_updateFaceInternal = "UPDATE Faces SET internal = 1 WHERE Fa
 const std::string c_insertFace = "INSERT INTO Faces (FaceID, ElementID, internal, FaceKey) VALUES (%d, %d, %d, %Q)";
 
 const std::string c_insertFaceNode = "INSERT INTO FaceNodes (FaceID, NodeID) VALUES (%d, %d)";
+
+const std::string c_insertNamedSet = "INSERT INTO NamedSets (SetID, Name, Type, ItemCount, ModelID) VALUES (%d, %Q, %d, %d, %d)";
+
+const std::string c_insertNamedSetItem = "INSERT INTO NamedSetItems (SetID, ItemID) VALUES (%d, %d)";
