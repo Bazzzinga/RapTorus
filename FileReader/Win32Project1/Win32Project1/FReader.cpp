@@ -196,6 +196,8 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 	 */
 	int nodeRowCount = getBlockRowCount(fn, CDB_NBLOCK);
 
+	int tempModelID;
+
 	while (std::getline(f, line))
 	{
 		/**
@@ -218,13 +220,13 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 			/**
 			 * Writing model type into database.
 			 */
-			char * sqlQuery = sqlite3_mprintf(c_inputModel.c_str(), this->modelType, this->filehash.c_str());
+			char * sqlQuery = sqlite3_mprintf(c_inputModel.c_str(), this->modelType);
 			dba->exec(sqlQuery, NULL, NULL);
 			sqlite3_free(sqlQuery);
+
 			/**
-			 * Getting model ID, witch was assigned to the model.
-			 */
-			int tempModelID;
+			 * Getting model ID, which was assigned to the model.
+			 */			
 			dba->exec(c_selectModelID, modelSelectIDCallback, (void*)(&tempModelID));
 			this->modelID = tempModelID;
 
@@ -384,6 +386,13 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 	 */
 	f.close();
 
+	/**
+	 * At the end updating filehash in database
+	 */
+	char * sqlQuery1 = sqlite3_mprintf(c_updateModelHash.c_str(), this->filehash.c_str(), this->modelID);
+	dba->exec(sqlQuery1, NULL, NULL);
+	sqlite3_free(sqlQuery1);
+	dba->freeBuffer();
 	return;
 }
 
@@ -514,7 +523,7 @@ _NodeS FReader::parseNodeRow(std::string str, _rowFormatS rf)
 	pos += rf.row_width;
 
 	
-	if (pos > (int)str.size()) { this->err = ERR_WRONG_FILE_FORMAT; return res; } /**< Check if line is correct  */ // проверка правильности переданной строки
+	if (pos > (int)str.size()) { this->err = ERR_WRONG_FILE_FORMAT; return res; } /**< Check if line is correct  */
 
 	if (this->modelType == 1) /**< SOLID model has two extra columns before coordinates */
 	{
@@ -1089,14 +1098,17 @@ void FReader::addEdgesToEdgeList(_ElementsS elem, int edges[][2], int n)
 _faceKeyS convertVectorToFaceKeyS(std::vector<int> nodeIDList)
 {
 	_faceKeyS res;
+	int temp = nodeIDList[0];
 
-	res.v1 = nodeIDList[0];
-	res.v2 = nodeIDList[1];
-	res.v3 = nodeIDList[2];
+	res.push_back(temp);
 
-	if (nodeIDList.size() > 3)
-		res.v4 = nodeIDList[3];
-
+	for (int i = 1; i < (int)nodeIDList.size(); ++i)
+		if (temp != nodeIDList[i])
+		{
+			temp = nodeIDList[i];
+			res.push_back(temp);		
+		}
+	
 	return res;
 }
 
@@ -1130,7 +1142,12 @@ int FReader::checkFaceInDB(_faceKeyS key)
 	 * Calculating a face key for database query.
 	 */
 	std::string key_s = "";
-	key_s.append(std::to_string(key.v1)).append(".").append(std::to_string(key.v2)).append(".").append(std::to_string(key.v3)).append(".").append(std::to_string(key.v4));
+	for (int i = 0; i < (int)key.size(); ++i)
+	{
+		if (i != 0)
+			key_s.append(".");
+		key_s.append(std::to_string(key[i]));
+	}
 
 	char * sqlQuery = sqlite3_mprintf(c_selectFaceByKey.c_str(), key_s.c_str());
 	
@@ -1159,7 +1176,7 @@ _checkFaceResultS FReader::checkFaceInList(std::vector<int> nodeIDList)
 	std::sort(nodeIDList.begin(), nodeIDList.end()); /**< Sorting node ID list to convert it into a face key. */
 
 	_faceKeyS key = convertVectorToFaceKeyS(nodeIDList);
-
+	 
 	int checkInDB = checkFaceInDB(key); /**< Checking if face is presented in database. */
 
 	if (checkInDB != -1)
@@ -1206,7 +1223,12 @@ void FReader::pushFaceToDB(_FacesS f)
 	* Calculating a face key for database query.
 	*/
 	std::string key_s = "";
-	key_s.append(std::to_string(f.faceKey.v1)).append(".").append(std::to_string(f.faceKey.v2)).append(".").append(std::to_string(f.faceKey.v3)).append(".").append(std::to_string(f.faceKey.v4));
+	for (int i = 0; i < (int)f.faceKey.size(); ++i)
+	{
+		if (i != 0)
+			key_s.append(".");
+		key_s.append(std::to_string(f.faceKey[i]));
+	}
 
 
 	char * sqlQuery = sqlite3_mprintf(c_insertFace.c_str(), f.id, f.elementID, f.internal?1:0, key_s.c_str());

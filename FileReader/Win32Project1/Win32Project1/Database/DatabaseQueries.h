@@ -26,7 +26,9 @@ const std::string c_selectModelID = "SELECT ModelID FROM Model";
 
 const std::string c_clearAllTables = "DELETE FROM Model; DELETE FROM Nodes; DELETE FROM Elements; DELETE FROM ElementNodes; DELETE FROM Edges; DELETE FROM Faces; DELETE FROM FaceNodes; VACUUM;";
 
-const std::string c_inputModel = "INSERT INTO Model (ModelType, ModelHash) VALUES (%d, %Q)";
+const std::string c_inputModel = "INSERT INTO Model (ModelType, ModelHash) VALUES (%d, '')";
+
+const std::string c_updateModelHash = "UPDATE Model SET ModelHash=%Q WHERE ModelID=%d";
 
 const std::string c_inputNode = "INSERT INTO Nodes (NodeID, x, y, z, a1, a2, a3, solidEntity, solidLineLocation, ModelID) VALUES (%d, %E, %E, %E, %E, %E, %E, %d, %d, %d)";
 

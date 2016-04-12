@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include <tuple> 
-
 #define MAX_NUM_OF_NODE_COLS 8  /**< Maximum number of columns in elements' first row in element block. */
 
 /**
@@ -69,20 +67,7 @@ struct _rowFormatS
 * A structure.
 * Structure for face keys.
 */
-struct _faceKeyS
-{
-	unsigned int v1 = 0;	/**< Node Id 1. */
-	unsigned int v2 = 0;	/**< Node Id 2. */
-	unsigned int v3 = 0;	/**< Node Id 3. */
-	unsigned int v4 = 0;	/**< Node Id 4. */
-
-	/**
-	 * == operator definition for face key structure.
-	 */
-	bool operator ==(const _faceKeyS& a) {
-		return std::tie(v1, v2, v3, v4) == std::tie(a.v1, a.v2, a.v3, a.v4);
-	}
-};
+typedef std::vector<int> _faceKeyS;
 
 /**
 * A structure.
