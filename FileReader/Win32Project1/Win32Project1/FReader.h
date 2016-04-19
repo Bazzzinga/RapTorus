@@ -28,6 +28,10 @@
  */
 #define FACE_LIST_MAX_SIZE 500
 
+ /**
+ * Maximum size of the list of named set faces kept in memory.
+ */
+#define NS_FACE_LIST_MAX_SIZE 100
 
  /**
   * FReader class. Main class of current solution. 
@@ -58,6 +62,9 @@ private:
 	int lastFaceID = 0;								/**< variable of last given face ID. Used to give all faces unique IDs.	*/
 
 	int lastNamedSetID = 0;							/**< variable of last given named set ID. Used to give all named sets unique IDs.	*/
+	
+	int lastNSFaceID = 0;							/**< variable of last given named set face ID. Used to give all named set faces unique IDs.	*/
+	
 
 	/**
 	* function to check if string of block format is correct.
@@ -198,6 +205,16 @@ private:
 	static int modelSelectHashCallback(void *data, int argc, char **argv, char **azColName);
 
 	/**
+	* callback function holding result of getting element faces from database.
+	* Arguments are default for callback function of SQLite3 library.
+	* @param[out] data pointer to variable provided it the 4th argument of sqlite3_exec().
+	* @param[in] argc number of columns in the row.
+	* @param[in] argv an array of strings represention fields in the row.
+	* @param[in] azColName  an array of strings representing column names.
+	*/
+	static int selectElementFacesCallback(void *data, int argc, char **argv, char **azColName);
+
+	/**
 	* callback function holding result of getting current model ID from database.
 	* Arguments are default for callback function of SQLite3 library.
 	* @param[out] data pointer to variable provided it the 4th argument of sqlite3_exec().
@@ -206,6 +223,16 @@ private:
 	* @param[in] azColName  an array of strings representing column names.
 	*/
 	static int modelSelectIDCallback(void *data, int argc, char **argv, char **azColName);
+
+	/**
+	* callback function holding result of checking face of named set element.
+	* Arguments are default for callback function of SQLite3 library.
+	* @param[out] data pointer to variable provided it the 4th argument of sqlite3_exec().
+	* @param[in] argc number of columns in the row.
+	* @param[in] argv an array of strings represention fields in the row.
+	* @param[in] azColName  an array of strings representing column names.
+	*/
+	static int checkFaceCallback(void *data, int argc, char **argv, char **azColName);
 
 	/**
 	* callback function holding result of getting face ID from database.
@@ -257,7 +284,7 @@ private:
 	* function setting face status to internal in database.
 	* @param[in] faceID ID internal face.
 	*/
-	void updateFaceInternal(int faceID);
+	void updateFaceInternal(int faceID, int elemID);
 
 	/**
 	* function adding face to buffer for adding to database.
@@ -285,6 +312,14 @@ private:
 	* @see _VSNode
 	*/
 	int getNodeIndex(int id);
+
+	/**
+	* function checking if list of faces in the face list.
+	* It checks if list of faces of a single element on named set has already been proceeded
+	* @param[in] _faces list of faces to be checked
+	* @param[in] _NSFList pointer to the list of faces of named set to be checked in along with the database
+	*/
+	void checkFacesInList(std::vector<int> _faces, std::vector<_NamedSetFaceS>* _NSFList, DatabaseAgent * _dba);
 
 public:
 

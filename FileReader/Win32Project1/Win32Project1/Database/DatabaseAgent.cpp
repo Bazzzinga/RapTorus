@@ -29,6 +29,7 @@ DatabaseAgent::DatabaseAgent(const char* dbname)
 	execBuffered(c_faceNodesTableCreationQuery);
 	execBuffered(c_NamedSetsTableCreationQuery);
 	execBuffered(c_NamedSetItemsTableCreationQuery);
+	execBuffered(c_NamedSetFacesTableCreationQuery);
 
 	this->freeBuffer();
 }

@@ -10,9 +10,17 @@
 {\ttfamily \#include \char`\"{}File\+Structs.\+h\char`\"{}}\\*
 {\ttfamily \#include \char`\"{}Element\+Types.\+h\char`\"{}}\\*
 {\ttfamily \#include \char`\"{}Database\textbackslash{}md5\textbackslash{}md5wrapper.\+h\char`\"{}}\\*
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{_f_reader_8cpp_a3366d1d42175f841c459590a448c63fa}{E\+L\+E\+M\+\_\+\+T\+Y\+P\+E\+\_\+\+B\+R\+I\+C\+K20\+\_\+\+F\+A\+C\+ES}~\{ \{ 0, 1, 5, 4 \}, \{ 1, 2, 6, 5 \}, \{ 2, 3, 7, 6 \}, \{ 3, 0, 4, 7 \}, \{ 4, 5, 6, 7 \}, \{ 3, 2, 1, 0 \} \}\hypertarget{_f_reader_8cpp_a3366d1d42175f841c459590a448c63fa}{}\label{_f_reader_8cpp_a3366d1d42175f841c459590a448c63fa}
+
+\begin{DoxyCompactList}\small\item\em Quadratic brick faces list. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
+int \hyperlink{_f_reader_8cpp_a17466cbf24df9aa2c4606bcfc24bc94c}{get\+All\+Row\+Count} (const char $\ast$fn)
+\begin{DoxyCompactList}\small\item\em Function to count amount of lines in file. \end{DoxyCompactList}\item 
 \hyperlink{_file_structs_8h_a3f1328036ba69b8a38f4d1743a5c8742}{\+\_\+face\+KeyS} \hyperlink{_f_reader_8cpp_ad59d51ec4d867b611df3e68707726796}{convert\+Vector\+To\+Face\+KeyS} (std\+::vector$<$ int $>$ node\+I\+D\+List)
 \begin{DoxyCompactList}\small\item\em Support function. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
@@ -42,5 +50,20 @@ This function is not part of \hyperlink{class_f_reader}{F\+Reader} class. It is 
 \end{DoxySeeAlso}
 
 
-Definition at line 1194 of file F\+Reader.\+cpp.
+Definition at line 1300 of file F\+Reader.\+cpp.
+
+\index{F\+Reader.\+cpp@{F\+Reader.\+cpp}!get\+All\+Row\+Count@{get\+All\+Row\+Count}}
+\index{get\+All\+Row\+Count@{get\+All\+Row\+Count}!F\+Reader.\+cpp@{F\+Reader.\+cpp}}
+\subsubsection[{\texorpdfstring{get\+All\+Row\+Count(const char $\ast$fn)}{getAllRowCount(const char *fn)}}]{\setlength{\rightskip}{0pt plus 5cm}int get\+All\+Row\+Count (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{fn}
+\end{DoxyParamCaption}
+)}\hypertarget{_f_reader_8cpp_a17466cbf24df9aa2c4606bcfc24bc94c}{}\label{_f_reader_8cpp_a17466cbf24df9aa2c4606bcfc24bc94c}
+
+
+Function to count amount of lines in file. 
+
+Used for calculation of amount of program work done. 
+
+Definition at line 128 of file F\+Reader.\+cpp.
 

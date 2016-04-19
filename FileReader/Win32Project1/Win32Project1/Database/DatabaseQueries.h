@@ -16,13 +16,15 @@ const std::string c_elementNodesTableCreationQuery = "CREATE TABLE IF NOT EXISTS
 
 const std::string c_edgesTableCreationQuery = "CREATE TABLE IF NOT EXISTS Edges (EdgeID INTEGER PRIMARY KEY AUTOINCREMENT, Node1ID INTEGER REFERENCES Nodes (NodeID) ON DELETE CASCADE, Node2ID INTEGER REFERENCES Nodes (NodeID)  ON DELETE CASCADE);";
 
-const std::string c_facesTableCreationQuery = "CREATE TABLE IF NOT EXISTS Faces (FaceID INTEGER PRIMARY KEY, ElementID INTEGER REFERENCES Elements (ElementID) ON DELETE CASCADE, internal BOOLEAN DEFAULT FALSE, FaceKey VARCHAR (50));";
+const std::string c_facesTableCreationQuery = "CREATE TABLE IF NOT EXISTS Faces (FaceID INTEGER PRIMARY KEY, ElementID INTEGER REFERENCES Elements (ElementID) ON DELETE CASCADE, internal BOOLEAN DEFAULT FALSE, FaceKey VARCHAR (50), Element2ID INTEGER REFERENCES Elements (ElementID) ON DELETE CASCADE);";
 
 const std::string c_faceNodesTableCreationQuery = "CREATE TABLE IF NOT EXISTS FaceNodes (FaceID INTEGER REFERENCES Faces (FaceID) ON DELETE CASCADE, NodeID INTEGER REFERENCES Nodes (NodeID)  ON DELETE CASCADE);";
 
 const std::string c_NamedSetsTableCreationQuery = "CREATE TABLE IF NOT EXISTS NamedSets (SetID INTEGER PRIMARY KEY, Name VARCHAR (50), Type INTEGER, ItemCount INTEGER, ModelID REFERENCES Model (ModelID) ON DELETE CASCADE);";
 
-const std::string c_NamedSetItemsTableCreationQuery = "CREATE TABLE NamedSetItems (SetID INTEGER REFERENCES NamedSets (SetID), ItemID INTEGER);";
+const std::string c_NamedSetItemsTableCreationQuery = "CREATE TABLE IF NOT EXISTS NamedSetItems (SetID INTEGER REFERENCES NamedSets (SetID), ItemID INTEGER);";
+
+const std::string c_NamedSetFacesTableCreationQuery = "CREATE TABLE IF NOT EXISTS NamedSetFaces (FaceID INTEGER REFERENCES Faces (FaceID), SetID INTEGER REFERENCES NamedSets (SetID), internal BOOLEAN);";
 
 const std::string c_selectModelHash = "SELECT ModelHash FROM Model";
 
@@ -46,12 +48,20 @@ const std::string c_inputEdge = "INSERT INTO Edges (Node1ID, Node2ID) VALUES (%d
 
 const std::string c_selectFaceByKey = "SELECT FaceID FROM Faces WHERE (internal = 0) AND (FaceKey = %Q)";
 
-const std::string c_updateFaceInternal = "UPDATE Faces SET internal = 1 WHERE FaceID = %d";
+const std::string c_updateFaceInternal = "UPDATE Faces SET internal = 1, Element2ID = %d WHERE FaceID = %d";
 
-const std::string c_insertFace = "INSERT INTO Faces (FaceID, ElementID, internal, FaceKey) VALUES (%d, %d, %d, %Q)";
+const std::string c_insertFace = "INSERT INTO Faces (FaceID, ElementID, internal, FaceKey, Element2ID) VALUES (%d, %d, %d, %Q, %d)";
 
 const std::string c_insertFaceNode = "INSERT INTO FaceNodes (FaceID, NodeID) VALUES (%d, %d)";
 
 const std::string c_insertNamedSet = "INSERT INTO NamedSets (SetID, Name, Type, ItemCount, ModelID) VALUES (%d, %Q, %d, %d, %d)";
 
 const std::string c_insertNamedSetItem = "INSERT INTO NamedSetItems (SetID, ItemID) VALUES (%d, %d)";
+
+const std::string c_selectElementFaces = "SELECT FaceID FROM FACES WHERE ElementID = %d OR Element2ID = %d";
+
+const std::string c_insertNamedSetFace = "INSERT INTO NamedSetFaces (FaceID, SetID, internal) VALUES (%d, %d, %d)";
+
+const std::string c_selectNamedSetFace = "SELECT * FROM NamedSetFaces WHERE FaceID = %d";
+
+const std::string c_updateNamedSetFace = "UPDATE NamedSetFaces SET internal = 1 WHERE FaceID = %d";

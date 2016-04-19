@@ -65,7 +65,7 @@ void DatabaseHandler::execQuery(std::string query, int(*callback)(void*, int, ch
 	*/
 	if (sqlres != 0)
 	{
-		std::cout << sqlerr;
+		std::cout << sqlerr << "\n";
 		sqlite3_free(sqlerr);
 	}
 }

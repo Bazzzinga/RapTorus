@@ -5,7 +5,15 @@ var searchData=
   ['elem_5fsolid285',['ELEM_SOLID285',['../_element_types_8h.html#aa9cf3e3aeefa87f86a634a8695dc6e4c',1,'ElementTypes.h']]],
   ['elem_5fsolid286',['ELEM_SOLID286',['../_element_types_8h.html#af0c2aeef6cdf456c30ec3b1593c07b64',1,'ElementTypes.h']]],
   ['elem_5ftype_5fbrick20',['ELEM_TYPE_BRICK20',['../_element_types_8h.html#a1f7445cfab6fe2fa35d88b58de4747c9',1,'ElementTypes.h']]],
+  ['elem_5ftype_5fbrick20_5fedges',['ELEM_TYPE_BRICK20_EDGES',['../_element_types_8h.html#a47666419aeefe631f21d457262bb5dcf',1,'ElementTypes.h']]],
+  ['elem_5ftype_5fbrick20_5ffaces',['ELEM_TYPE_BRICK20_FACES',['../_f_reader_8cpp.html#a3366d1d42175f841c459590a448c63fa',1,'ElementTypes.h']]],
   ['elem_5ftype_5fbrick8',['ELEM_TYPE_BRICK8',['../_element_types_8h.html#ae125d6eb9e7947feb33b6deb7c6a12fe',1,'ElementTypes.h']]],
+  ['elem_5ftype_5fbrick8_5fedges',['ELEM_TYPE_BRICK8_EDGES',['../_element_types_8h.html#ad5424b0f373a67013576b3175369134e',1,'ElementTypes.h']]],
+  ['elem_5ftype_5fbrick8_5ffaces',['ELEM_TYPE_BRICK8_FACES',['../_element_types_8h.html#a5492d616303c58f1b4a0e7cf68651e3e',1,'ElementTypes.h']]],
   ['elem_5ftype_5ftetra10',['ELEM_TYPE_TETRA10',['../_element_types_8h.html#a3a0e3e22308ebd0cd6d293902e2a1cf0',1,'ElementTypes.h']]],
-  ['elem_5ftype_5ftetra4',['ELEM_TYPE_TETRA4',['../_element_types_8h.html#ac4b60d8607f7e41c691c2f8c5da2149c',1,'ElementTypes.h']]]
+  ['elem_5ftype_5ftetra10_5fedges',['ELEM_TYPE_TETRA10_EDGES',['../_element_types_8h.html#a4209531de99d4e577905aff98cda9fa7',1,'ElementTypes.h']]],
+  ['elem_5ftype_5ftetra10_5ffaces',['ELEM_TYPE_TETRA10_FACES',['../_element_types_8h.html#acfa4751adbd0c7c90770088d56454adb',1,'ElementTypes.h']]],
+  ['elem_5ftype_5ftetra4',['ELEM_TYPE_TETRA4',['../_element_types_8h.html#ac4b60d8607f7e41c691c2f8c5da2149c',1,'ElementTypes.h']]],
+  ['elem_5ftype_5ftetra4_5fedges',['ELEM_TYPE_TETRA4_EDGES',['../_element_types_8h.html#a3c3b8d959ea7ea1340a36f9bd1fdbb86',1,'ElementTypes.h']]],
+  ['elem_5ftype_5ftetra4_5ffaces',['ELEM_TYPE_TETRA4_FACES',['../_element_types_8h.html#acdc75fc9e3314e59b15b0259d47e23c0',1,'ElementTypes.h']]]
 ];

@@ -18,8 +18,10 @@ int \hyperlink{struct___faces_s_a7365ff5c5951b2a61ef5e4411b0d521a}{id}
 \begin{DoxyCompactList}\small\item\em Face key. \end{DoxyCompactList}\item 
 bool \hyperlink{struct___faces_s_a5ce239e336aea528dad6008a6f2909f0}{internal} = false
 \begin{DoxyCompactList}\small\item\em Flag showing if this face is internal or not. \end{DoxyCompactList}\item 
-short \hyperlink{struct___faces_s_a430ed7b14ef236bea40b0a9be2801c94}{element\+ID}
+int \hyperlink{struct___faces_s_a96e133867444b5c1ab6b0ebd281de0fb}{element\+ID}
 \begin{DoxyCompactList}\small\item\em Corresponding element ID. \end{DoxyCompactList}\item 
+int \hyperlink{struct___faces_s_a6a710d10167fc0966c6b1fd763c55603}{element2\+ID} = 0
+\begin{DoxyCompactList}\small\item\em Second corresponding element ID. \end{DoxyCompactList}\item 
 std\+::vector$<$ int $>$ \hyperlink{struct___faces_s_a1af35bd658b7be0f98e09deb5f8b3ead}{node\+I\+D\+List}
 \begin{DoxyCompactList}\small\item\em List of I\+Ds of nodes defining this face. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
@@ -34,9 +36,20 @@ Definition at line 79 of file File\+Structs.\+h.
 
 
 \subsection{Member Data Documentation}
+\index{\+\_\+\+FacesS@{\+\_\+\+FacesS}!element2\+ID@{element2\+ID}}
+\index{element2\+ID@{element2\+ID}!\+\_\+\+FacesS@{\+\_\+\+FacesS}}
+\subsubsection[{\texorpdfstring{element2\+ID}{element2ID}}]{\setlength{\rightskip}{0pt plus 5cm}int \+\_\+\+Faces\+S\+::element2\+ID = 0}\hypertarget{struct___faces_s_a6a710d10167fc0966c6b1fd763c55603}{}\label{struct___faces_s_a6a710d10167fc0966c6b1fd763c55603}
+
+
+Second corresponding element ID. 
+
+
+
+Definition at line 89 of file File\+Structs.\+h.
+
 \index{\+\_\+\+FacesS@{\+\_\+\+FacesS}!element\+ID@{element\+ID}}
 \index{element\+ID@{element\+ID}!\+\_\+\+FacesS@{\+\_\+\+FacesS}}
-\subsubsection[{\texorpdfstring{element\+ID}{elementID}}]{\setlength{\rightskip}{0pt plus 5cm}short \+\_\+\+Faces\+S\+::element\+ID}\hypertarget{struct___faces_s_a430ed7b14ef236bea40b0a9be2801c94}{}\label{struct___faces_s_a430ed7b14ef236bea40b0a9be2801c94}
+\subsubsection[{\texorpdfstring{element\+ID}{elementID}}]{\setlength{\rightskip}{0pt plus 5cm}int \+\_\+\+Faces\+S\+::element\+ID}\hypertarget{struct___faces_s_a96e133867444b5c1ab6b0ebd281de0fb}{}\label{struct___faces_s_a96e133867444b5c1ab6b0ebd281de0fb}
 
 
 Corresponding element ID. 
@@ -87,7 +100,7 @@ List of I\+Ds of nodes defining this face.
 
 Node I\+Ds are place according to right-\/hand rule. 
 
-Definition at line 92 of file File\+Structs.\+h.
+Definition at line 94 of file File\+Structs.\+h.
 
 
 

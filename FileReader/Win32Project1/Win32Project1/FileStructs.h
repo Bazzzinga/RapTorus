@@ -84,7 +84,9 @@ struct _FacesS
 
 	bool internal = false;	/**< Flag showing if this face is internal or not. */
 
-	short elementID;		/**< Corresponding element ID. */
+	int elementID;		/**< Corresponding element ID. */
+
+	int element2ID = 0;		/**< Second corresponding element ID. */
 	/**
 	 * List of IDs of nodes defining this face.
 	 * Node IDs are place according to right-hand rule.
@@ -126,4 +128,15 @@ struct _NamedSetS
 	int itemCount;			/**< Number of items in set. */	
 
 	std::vector<unsigned int> itemList;	/**< List of set items IDs. */
+};
+
+/**
+* A structure.
+* Structure for holding information if face is internal or external.
+*/
+struct _NamedSetFaceS
+{
+	bool internal = false;	/**< Internal or external flag. */
+	
+	int FaceID;				/**< Face ID */
 };

@@ -107,9 +107,12 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a5ce239e336aea528dad6008a6f2909f0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___faces_s.html#a5ce239e336aea528dad6008a6f2909f0">internal</a> = false</td></tr>
 <tr class="memdesc:a5ce239e336aea528dad6008a6f2909f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag showing if this face is internal or not.  <a href="#a5ce239e336aea528dad6008a6f2909f0">More...</a><br /></td></tr>
 <tr class="separator:a5ce239e336aea528dad6008a6f2909f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a430ed7b14ef236bea40b0a9be2801c94"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___faces_s.html#a430ed7b14ef236bea40b0a9be2801c94">elementID</a></td></tr>
-<tr class="memdesc:a430ed7b14ef236bea40b0a9be2801c94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Corresponding element ID.  <a href="#a430ed7b14ef236bea40b0a9be2801c94">More...</a><br /></td></tr>
-<tr class="separator:a430ed7b14ef236bea40b0a9be2801c94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96e133867444b5c1ab6b0ebd281de0fb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___faces_s.html#a96e133867444b5c1ab6b0ebd281de0fb">elementID</a></td></tr>
+<tr class="memdesc:a96e133867444b5c1ab6b0ebd281de0fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Corresponding element ID.  <a href="#a96e133867444b5c1ab6b0ebd281de0fb">More...</a><br /></td></tr>
+<tr class="separator:a96e133867444b5c1ab6b0ebd281de0fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a710d10167fc0966c6b1fd763c55603"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___faces_s.html#a6a710d10167fc0966c6b1fd763c55603">element2ID</a> = 0</td></tr>
+<tr class="memdesc:a6a710d10167fc0966c6b1fd763c55603"><td class="mdescLeft">&#160;</td><td class="mdescRight">Second corresponding element ID.  <a href="#a6a710d10167fc0966c6b1fd763c55603">More...</a><br /></td></tr>
+<tr class="separator:a6a710d10167fc0966c6b1fd763c55603"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1af35bd658b7be0f98e09deb5f8b3ead"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___faces_s.html#a1af35bd658b7be0f98e09deb5f8b3ead">nodeIDList</a></td></tr>
 <tr class="memdesc:a1af35bd658b7be0f98e09deb5f8b3ead"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of IDs of nodes defining this face.  <a href="#a1af35bd658b7be0f98e09deb5f8b3ead">More...</a><br /></td></tr>
 <tr class="separator:a1af35bd658b7be0f98e09deb5f8b3ead"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -120,12 +123,28 @@ Public Attributes</h2></td></tr>
 
 <p>Definition at line <a class="el" href="_file_structs_8h_source.html#l00079">79</a> of file <a class="el" href="_file_structs_8h_source.html">FileStructs.h</a>.</p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a430ed7b14ef236bea40b0a9be2801c94"></a>
+<a class="anchor" id="a6a710d10167fc0966c6b1fd763c55603"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">short _FacesS::elementID</td>
+          <td class="memname">int _FacesS::element2ID = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Second corresponding element ID. </p>
+
+<p>Definition at line <a class="el" href="_file_structs_8h_source.html#l00089">89</a> of file <a class="el" href="_file_structs_8h_source.html">FileStructs.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a96e133867444b5c1ab6b0ebd281de0fb"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int _FacesS::elementID</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -197,7 +216,7 @@ Public Attributes</h2></td></tr>
 <p>List of IDs of nodes defining this face. </p>
 <p>Node IDs are place according to right-hand rule. </p>
 
-<p>Definition at line <a class="el" href="_file_structs_8h_source.html#l00092">92</a> of file <a class="el" href="_file_structs_8h_source.html">FileStructs.h</a>.</p>
+<p>Definition at line <a class="el" href="_file_structs_8h_source.html#l00094">94</a> of file <a class="el" href="_file_structs_8h_source.html">FileStructs.h</a>.</p>
 
 </div>
 </div>

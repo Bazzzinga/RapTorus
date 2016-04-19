@@ -122,6 +122,24 @@ void FReader::pushEdgeToDB(int v1, int v2)
 }
 
 /**
+* Function to count amount of lines in file.
+* Used for calculation of amount of program work done.
+*/
+int getAllRowCount(const char * fn)
+{
+	std::ifstream f(fn);
+	std::string line;
+	int res = 0;
+		
+	while (std::getline(f, line))
+		++res;
+
+	f.close();
+
+	return res;
+}
+
+/**
 * Class constructor.
 * @param[in] fn mesh file name.
 * @param[in] _dba database connection handle.
@@ -129,6 +147,7 @@ void FReader::pushEdgeToDB(int v1, int v2)
 */
 FReader::FReader(const char* fn, DatabaseAgent * _dba)
 {
+	int _rowN = 0;
 	/**
 	 * Open input file.
 	 */
@@ -196,10 +215,16 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 	 */
 	int nodeRowCount = getBlockRowCount(fn, CDB_NBLOCK);
 
+	int allRowCount = getAllRowCount(fn);
+
 	int tempModelID;
 
 	while (std::getline(f, line))
 	{
+		++_rowN;
+
+		std::cout << "Completed: " << (int)(_rowN * 100 / (allRowCount + 1)) << "%" << "\r";
+
 		/**
 		 * Node block information started.
 		 */
@@ -236,6 +261,8 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 			if (!std::getline(f, nb_format_line))
 				{ this->err = ERR_WRONG_FILE_FORMAT;return; }
 
+			++_rowN;
+
 			/**
 			 * Checking if format line is correct.
 			 */
@@ -257,6 +284,8 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 
 				if (std::getline(f, nb_line))
 				{	
+					++_rowN;
+					std::cout << "Completed: " << (int)(_rowN * 100 / (allRowCount + 1)) << "%" << "\r";
 					/**
 					 * Checking if we came to the end of current block.
 					 */
@@ -325,6 +354,7 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 			if (!std::getline(f, eb_format_line))
 			{ this->err = ERR_WRONG_FILE_FORMAT; return; }
 
+			++_rowN;
 			/**
 			 * Checking if format line is correct.
 			 */
@@ -346,6 +376,8 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 
 				if (std::getline(f, nb_line))
 				{
+					++_rowN;
+					std::cout << "Completed: " << (int)(_rowN * 100 / (allRowCount + 1)) << "%" << "\r";
 					/**
 					 * Checking if we came to the end of current block.
 					 */
@@ -360,6 +392,8 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 						 */
 						_ElementsS elem = this->parseElementRow(nb_line, rowFormat, &f);
 
+						if(elem.nodes_num > 8)
+							++_rowN;
 						/**
 						 * Adding extracted element to database query buffer.
 						 * @see pushElementToDB()
@@ -387,6 +421,8 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 			bool end = false;
 
 			_NamedSetS nSet;
+
+			std::vector<_NamedSetFaceS> _NSFaces;
 
 			++lastNamedSetID;
 
@@ -438,6 +474,8 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 				this->err = ERR_WRONG_FILE_FORMAT; return;
 			}
 
+			++_rowN;
+			
 			/**
 			* Checking if format line is correct.
 			*/
@@ -451,29 +489,72 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 			for (int ii = 0; ii < nSet.itemCount; ++ii)
 			{
 				if ((ii % rowFormat.row_num == 0) && (!std::getline(f, nb_line))) { this->err = ERR_WRONG_FILE_FORMAT; return; }
+
+				++_rowN;
+				std::cout << "Completed:       " << (int)(_rowN * 100 / (allRowCount + 1)) << "%" << "\r";
 				
 				int itemID = atoi(nb_line.substr(0, rowFormat.row_width).c_str());
 
 				bool negative = (itemID < 0);
 
 				if (negative)
+				{
 					itemID *= -1;
-
-				nb_line = nb_line.substr(rowFormat.row_width, (int)nb_line.length() - rowFormat.row_width);
-
+					for (int kk = nSet.itemList[(int)nSet.itemList.size() - 1] + 1; kk < itemID; ++kk)
+						nSet.itemList.push_back(kk);
+				}
+				
 				nSet.itemList.push_back(itemID);
+
+				nb_line = nb_line.substr(rowFormat.row_width, (int)nb_line.length() - rowFormat.row_width);				
 			}
 
 			char * sqlQueryNS = sqlite3_mprintf(c_insertNamedSet.c_str(), nSet.SetID, nSet.name.c_str(), nSet.type, nSet.itemCount, this->modelID);
-			dba->execBuffered(sqlQueryNS);
+			dba->exec(sqlQueryNS, NULL, NULL);
 			sqlite3_free(sqlQueryNS);
+			
+			int nSetItemListSize = (int)nSet.itemList.size();
 
-			for (int jj = 0; jj < nSet.itemCount; ++jj)
+			for (int jj = 0; jj < nSetItemListSize; ++jj)
 			{
+				std::cout << "Completed part 2: " << (int)(jj * 100 / (nSetItemListSize + 1)) << "%" << "\r";
 				char * sqlQueryNSI = sqlite3_mprintf(c_insertNamedSetItem.c_str(), nSet.SetID, nSet.itemList[jj]);
 				dba->execBuffered(sqlQueryNSI);
 				sqlite3_free(sqlQueryNSI);
+
+				if (nSet.type == NAMED_SET_TYPE_ELEM)
+				{
+					std::vector<int> _faces;
+					char * sqlQuery1 = sqlite3_mprintf(c_selectElementFaces.c_str(), nSet.itemList[jj], nSet.itemList[jj]);
+					dba->exec(sqlQuery1, selectElementFacesCallback, &_faces);
+					sqlite3_free(sqlQuery1);
+
+					checkFacesInList(_faces, &_NSFaces, dba);
+
+					if ((int)_NSFaces.size() >= NS_FACE_LIST_MAX_SIZE)
+					{
+						for (int j = 0; j < (int)_NSFaces.size(); ++j)
+						{
+							char * sqlQueryIns = sqlite3_mprintf(c_insertNamedSetFace.c_str(), _NSFaces[j].FaceID, nSet.SetID, _NSFaces[j].internal);
+							dba->execBuffered(sqlQueryIns);
+							sqlite3_free(sqlQueryIns);
+						}
+
+						_NSFaces.clear();
+						dba->freeBuffer();
+					}					
+				}
 			}
+
+			for (int jj = 0; jj < (int)_NSFaces.size(); ++jj)
+			{
+				char * sqlQueryIns = sqlite3_mprintf(c_insertNamedSetFace.c_str(), _NSFaces[jj].FaceID, nSet.SetID, _NSFaces[jj].internal);
+				dba->execBuffered(sqlQueryIns);
+				sqlite3_free(sqlQueryIns);
+			}
+
+			_NSFaces.clear();
+			dba->freeBuffer();
 		}						
 	}
 
@@ -490,6 +571,85 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 	sqlite3_free(sqlQuery1);
 	dba->freeBuffer();
 	return;
+}
+
+/**
+* function checking if list of faces in the face list.
+* It checks if list of faces of a single element on named set has already been proceeded
+* @param[in] _faces list of faces to be checked
+* @param[in] _NSFList pointer to the list of faces of named set to be checked in along with the database
+*/
+void FReader::checkFacesInList(std::vector<int> _faces, std::vector<_NamedSetFaceS>* _NSFList, DatabaseAgent * _dba)
+{	
+	for (int ii = 0; ii < (int)_faces.size(); ++ii)
+	{
+		bool found = false;
+
+		char * sqlQuery1 = sqlite3_mprintf(c_selectNamedSetFace.c_str(), _faces[ii]);
+		dba->exec(sqlQuery1, checkFaceCallback, &found);
+		sqlite3_free(sqlQuery1);
+
+		if (!found)
+		{
+			for (int i = 0; i < (int)_NSFList->size(); ++i)
+				if ((*_NSFList)[i].FaceID == _faces[ii])
+				{
+					(*_NSFList)[i].internal = true;
+					found = true;
+					break;
+				}
+		}
+		else
+		{		
+			char * sqlQuery2 = sqlite3_mprintf(c_updateNamedSetFace.c_str(), _faces[ii]);
+			dba->execBuffered(sqlQuery2);
+			sqlite3_free(sqlQuery2);			
+		}
+
+		if (!found)
+		{
+			_NamedSetFaceS temp;
+
+			temp.FaceID = _faces[ii];
+			_NSFList->push_back(temp);
+		}
+	}
+}
+
+/**
+* callback function holding result of checking face of named set element.
+* Arguments are default for callback function of SQLite3 library.
+* @param[out] data pointer to variable provided it the 4th argument of sqlite3_exec().
+* @param[in] argc number of columns in the row.
+* @param[in] argv an array of strings represention fields in the row.
+* @param[in] azColName  an array of strings representing column names.
+*/
+int FReader::checkFaceCallback(void *data, int argc, char **argv, char **azColName)
+{
+	bool * found = (bool*)data;
+
+	*found = true;
+
+	return 0;
+}
+
+/**
+* callback function holding result of getting element faces from database.
+* Arguments are default for callback function of SQLite3 library.
+* @param[out] data pointer to variable provided it the 4th argument of sqlite3_exec().
+* @param[in] argc number of columns in the row.
+* @param[in] argv an array of strings represention fields in the row.
+* @param[in] azColName  an array of strings representing column names.
+*/
+int FReader::selectElementFacesCallback(void *data, int argc, char **argv, char **azColName)
+{
+	std::vector<int>* _faces = (std::vector<int>*)data;
+
+	int faceID = atoi(argv[0]);
+
+	_faces->push_back(faceID);
+	
+	return 0;
 }
 
 /**
@@ -946,10 +1106,7 @@ void FReader::parseElementToEdgesAndFaces(_ElementsS elem)
 			 /**
 			 * Pairs of node indexes that form an edge.
 			 */
-			int edgesToAdd[][2] = { { 0, 1 },{ 0, 2 },{ 0, 3 },
-									{ 1, 0 },{ 1, 2 },{ 1, 3 },
-									{ 2, 1 },{ 2, 0 },{ 2, 3 },
-									{ 3, 0 },{ 3, 2 },{ 3, 1 } };
+			int edgesToAdd[][2] = ELEM_TYPE_TETRA4_EDGES;
 			
 
 			addEdgesToEdgeList(elem, edgesToAdd, sizeof(edgesToAdd) / sizeof(int) / 2);
@@ -957,10 +1114,7 @@ void FReader::parseElementToEdgesAndFaces(_ElementsS elem)
 			/**
 			* Triplets of node indexes that form a face.
 			*/
-			int facesToAdd[][3] = { {0, 1, 3},
-									{1, 2, 3},
-									{0, 2, 1},
-									{2, 0, 3} };
+			int facesToAdd[][3] = ELEM_TYPE_TETRA4_FACES;
 
 			addTriFacesToFaceList(elem, facesToAdd, sizeof(facesToAdd) / sizeof(int) / 3);
 
@@ -982,26 +1136,14 @@ void FReader::parseElementToEdgesAndFaces(_ElementsS elem)
 			/**
 			* Pairs of node indexes that form an edge.
 			*/
-			int edgesToAdd[][2] = { { 0, 4 },{ 0, 6 },{ 0, 7 },
-									{ 1, 4 },{ 1, 5 },{ 1, 8 },
-									{ 2, 5 },{ 2, 6 },{ 2, 9 },
-									{ 3, 7 },{ 3, 8 },{ 3, 9 },
-									{ 4, 0 },{ 4, 1 },
-									{ 5, 1 },{ 5, 2 },
-									{ 6, 0 },{ 6, 2 },
-									{ 7, 0 },{ 7, 3 },
-									{ 8, 1 },{ 8, 3 },
-									{ 9, 2 },{ 9, 3 } };
+			int edgesToAdd[][2] = ELEM_TYPE_TETRA10_EDGES;
 
 			addEdgesToEdgeList(elem, edgesToAdd, sizeof(edgesToAdd) / sizeof(int) / 2);
 
 			/**
 			* Triplets of node indexes that form a face.
 			*/
-			int facesToAdd[][3] = { { 0, 1, 3 },
-									{ 1, 2, 3 },
-									{ 0, 2, 1 },
-									{ 2, 0, 3 } };
+			int facesToAdd[][3] = ELEM_TYPE_TETRA10_FACES;
 			
 			addTriFacesToFaceList(elem, facesToAdd, sizeof(facesToAdd) / sizeof(int) / 3);
 
@@ -1029,26 +1171,14 @@ void FReader::parseElementToEdgesAndFaces(_ElementsS elem)
 			/**
 			 * Pairs of node indexes that form an edge.
 			 */
-			int edgesToAdd[][2] = { { 0, 1 },{ 0, 3 },{ 0, 4 },
-									{ 1, 0 },{ 1, 2 },{ 1, 5 },
-									{ 2, 1 },{ 2, 6 },{ 2, 3 },
-									{ 3, 0 },{ 3, 2 },{ 3, 7 },
-									{ 4, 0 },{ 4, 5 },{ 4, 7 },
-									{ 5, 1 },{ 5, 4 },{ 5, 6 },
-									{ 6, 2 },{ 6, 5 },{ 6, 7 },
-									{ 7, 3 },{ 7, 4 },{ 7, 6 } };
+			int edgesToAdd[][2] = ELEM_TYPE_BRICK8_EDGES;
 
 			addEdgesToEdgeList(elem, edgesToAdd, sizeof(edgesToAdd) / sizeof(int) / 2);
 
 			/**
 			* Qauds of node indexes that form a face.
 			*/
-			int facesToAdd[][4] = { { 0, 1, 5, 4 },
-									{ 1, 2, 6, 5 },
-									{ 2, 3, 7, 6 },
-									{ 3, 0, 4, 7 },
-									{ 4, 5, 6, 7 },
-									{ 3, 2, 1, 0 } };
+			int facesToAdd[][4] = ELEM_TYPE_BRICK8_FACES;
 
 			addQuadFacesToFaceList(elem, facesToAdd, sizeof(facesToAdd) / sizeof(int) / 4);
 
@@ -1076,38 +1206,14 @@ void FReader::parseElementToEdgesAndFaces(_ElementsS elem)
 			/**
 			* Pairs of node indexes that form an edge.
 			*/
-			int edgesToAdd[][2] = { { 0,  8 },{ 0, 11 },{ 0, 16 },
-									{ 1,  8 },{ 1,  9 },{ 1, 17 },
-									{ 2,  9 },{ 2, 10 },{ 2, 18 },
-									{ 3, 10 },{ 3, 11 },{ 3, 19 },
-									{ 4, 12 },{ 4, 15 },{ 4, 16 },
-									{ 5, 12 },{ 5, 13 },{ 5, 17 },
-									{ 6, 13 },{ 6, 14 },{ 6, 18 },
-									{ 7, 14 },{ 7, 15 },{ 7, 19 },
-									{ 8,  0 },{ 8,  1 },
-									{ 9,  1 },{ 9,  2 },
-									{ 10, 2 },{ 10, 3 },
-									{ 11, 0 },{ 11, 3 },
-									{ 12, 4 },{ 12, 5 },
-									{ 13, 5 },{ 13, 6 },
-									{ 14, 6 },{ 14, 7 },
-									{ 15, 7 },{ 15, 4 },
-									{ 16, 0 },{ 16, 4 },
-									{ 17, 1 },{ 17, 5 },
-									{ 18, 2 },{ 18, 6 },
-									{ 19, 3 },{ 19, 7 } };
+			int edgesToAdd[][2] = ELEM_TYPE_BRICK20_EDGES;
 
 			addEdgesToEdgeList(elem, edgesToAdd, sizeof(edgesToAdd) / sizeof(int) / 2);
 
 			/**
 			* Qauds of node indexes that form a face.
 			*/
-			int facesToAdd[][4] = { { 0, 1, 5, 4 },
-									{ 1, 2, 6, 5 },
-									{ 2, 3, 7, 6 },
-									{ 3, 0, 4, 7 },
-									{ 4, 5, 6, 7 },
-									{ 3, 2, 1, 0 } };
+			int facesToAdd[][4] = ELEM_TYPE_BRICK20_FACES;
 
 			addQuadFacesToFaceList(elem, facesToAdd, sizeof(facesToAdd) / sizeof(int) / 4);
 
@@ -1299,9 +1405,9 @@ _checkFaceResultS FReader::checkFaceInList(std::vector<int> nodeIDList)
 * function setting face status to internal in database.
 * @param[in] faceID ID internal face.
 */
-void FReader::updateFaceInternal(int faceID)
+void FReader::updateFaceInternal(int faceID, int elemID)
 {
-	char * sqlQuery = sqlite3_mprintf(c_updateFaceInternal.c_str(), faceID);
+	char * sqlQuery = sqlite3_mprintf(c_updateFaceInternal.c_str(), elemID, faceID);
 
 	dba->execBuffered(std::string(sqlQuery));
 
@@ -1327,7 +1433,7 @@ void FReader::pushFaceToDB(_FacesS f)
 	}
 
 
-	char * sqlQuery = sqlite3_mprintf(c_insertFace.c_str(), f.id, f.elementID, f.internal?1:0, key_s.c_str());
+	char * sqlQuery = sqlite3_mprintf(c_insertFace.c_str(), f.id, f.elementID, f.internal?1:0, key_s.c_str(), f.element2ID);
 
 	dba->execBuffered(std::string(sqlQuery));
 
@@ -1371,11 +1477,12 @@ void FReader::addToFaceList(std::vector<int> nodeIDList, int elementID)
 	if (index != -1)
 	{
 		if (check_res.inDB)
-			updateFaceInternal(index);
+			updateFaceInternal(index, elementID);
 		else
 		{
 			_FacesList[index].internal = true;
-			updateFaceInternal(_FacesList[index].id);
+			_FacesList[index].element2ID = elementID;
+			updateFaceInternal(_FacesList[index].id, elementID);
 		}
 	}
 	else
