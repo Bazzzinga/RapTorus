@@ -226,6 +226,34 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 		std::cout << "Completed: " << (int)(_rowN * 100 / (allRowCount + 1)) << "%" << "\r";
 
 		/**
+		* Element type definition command
+		*/
+		if (line.compare(0, 2, "ET") == 0)
+		{
+			if((int)line.length() < 4)
+				{this->err = ERR_WRONG_FILE_FORMAT; return;}
+
+			line = line.substr(3, (int)line.length() - 3);
+
+			int commaPos = line.find(',');
+
+			if( (commaPos < 0) || (commaPos == ((int)line.length() - 1)) )
+				{this->err = ERR_WRONG_FILE_FORMAT; return;}
+
+
+
+			int typeID = atoi(line.substr(0, commaPos).c_str());
+			int typeName = atoi(line.substr(commaPos + 1).c_str());
+
+			_ElementTypeS temp;
+
+			temp.ID = typeID;
+			temp.type = typeName;
+
+			_ElementTypeList.push_back(temp);
+		}
+
+		/**
 		 * Node block information started.
 		 */
 		if (line.compare(0, 6, "NBLOCK") == 0)
@@ -1088,134 +1116,96 @@ int FReader::getBlockRowCount(const char* fn, FILE_BLOCK_TYPES type)
 */
 void FReader::parseElementToEdgesAndFaces(_ElementsS elem)
 {
-	switch (elem.nodes_num)
+	int elemType = 0;
+	for (int i = 0; i < (int)_ElementTypeList.size(); ++i)
+		if (_ElementTypeList[i].ID == elem.type)
+			elemType = _ElementTypeList[i].type;
+
+	switch (elemType)
 	{
-		case ELEM_TYPE_TETRA4:
-		{
-			/**
-			 * Tetrahedra (with 4 nodes) nodes enumiration:
-			 *
-			 *       (3)------(2)
-			 *      /   \  .  /
-			 *     /    .\   /
-			 *    /  .    \ /
-			 *  (0)-------(1)
-			 *
-			 */
-
-			 /**
-			 * Pairs of node indexes that form an edge.
-			 */
+		case ELEM_TYPE_285_TETRA4:
+		{						
 			int edgesToAdd[][2] = ELEM_TYPE_TETRA4_EDGES;
-			
-
 			addEdgesToEdgeList(elem, edgesToAdd, sizeof(edgesToAdd) / sizeof(int) / 2);
 
-			/**
-			* Triplets of node indexes that form a face.
-			*/
 			int facesToAdd[][3] = ELEM_TYPE_TETRA4_FACES;
-
 			addTriFacesToFaceList(elem, facesToAdd, sizeof(facesToAdd) / sizeof(int) / 3);
 
 			break;
 		}
-		case ELEM_TYPE_TETRA10:
+		case ELEM_TYPE_187_TETRA10:
 		{
-			/**
-			* Tetrahedra (with 10 nodes) nodes enumiration:
-			*
-			*       (3)-(9)-(2)
-			*      /   \  .  /
-			*    (7)   (8) (5)          (0)---(6)---(2)
-			*    /  .    \ /
-			*  (0)--(4)--(1)
-			*
-			*/
-
-			/**
-			* Pairs of node indexes that form an edge.
-			*/
 			int edgesToAdd[][2] = ELEM_TYPE_TETRA10_EDGES;
-
 			addEdgesToEdgeList(elem, edgesToAdd, sizeof(edgesToAdd) / sizeof(int) / 2);
 
-			/**
-			* Triplets of node indexes that form a face.
-			*/
-			int facesToAdd[][3] = ELEM_TYPE_TETRA10_FACES;
-			
+			int facesToAdd[][3] = ELEM_TYPE_TETRA10_FACES;			
 			addTriFacesToFaceList(elem, facesToAdd, sizeof(facesToAdd) / sizeof(int) / 3);
 
 			break;
 		}
-		case ELEM_TYPE_BRICK8:
+		case ELEM_TYPE_185_BRICK8:
 		{
-			/**
-			* Brick (with 8 nodes) nodes enumiration:
-			*
-			*        (7)-------(6)
-			*        /|        /|
-			*       / |       / |
-			*      /  |      /  |
-			*    (4)-------(5)  |
-			*     |   |     |   |
-			*     |  (3)----|--(2)
-			*     |  /      |  /
-			*     | /       | /
-			*     |/        |/
-			*    (0)-------(1)
-			*
-			*/
-
-			/**
-			 * Pairs of node indexes that form an edge.
-			 */
 			int edgesToAdd[][2] = ELEM_TYPE_BRICK8_EDGES;
-
 			addEdgesToEdgeList(elem, edgesToAdd, sizeof(edgesToAdd) / sizeof(int) / 2);
-
-			/**
-			* Qauds of node indexes that form a face.
-			*/
+						
 			int facesToAdd[][4] = ELEM_TYPE_BRICK8_FACES;
-
 			addQuadFacesToFaceList(elem, facesToAdd, sizeof(facesToAdd) / sizeof(int) / 4);
 
 			break;
 		}
-		case ELEM_TYPE_BRICK20:
+		case ELEM_TYPE_186_BRICK20:
 		{
-			/**
-			* Brick (with 8 nodes) nodes enumiration:
-			*
-			*        (7)--(14)-(6)
-			*        /|        /|
-			*     (15)|     (13)|
-			*      / (19)    / (18)
-			*    (4)--(12)-(5)  |
-			*     |   |     |   |
-			*     |  (3)-(10|--(2)
-			*   (16) /    (17) /
-			*     |(11)     |(9)
-			*     |/        |/
-			*    (0)--(8)--(1)
-			*
-			*/
-
-			/**
-			* Pairs of node indexes that form an edge.
-			*/
 			int edgesToAdd[][2] = ELEM_TYPE_BRICK20_EDGES;
-
 			addEdgesToEdgeList(elem, edgesToAdd, sizeof(edgesToAdd) / sizeof(int) / 2);
 
-			/**
-			* Qauds of node indexes that form a face.
-			*/
 			int facesToAdd[][4] = ELEM_TYPE_BRICK20_FACES;
-
 			addQuadFacesToFaceList(elem, facesToAdd, sizeof(facesToAdd) / sizeof(int) / 4);
+
+			break;
+		}
+		case ELEM_TYPE_181_SHELL4:
+		case ELEM_TYPE_182_PLANE4:
+		{
+			int edgesToAdd[][2] = ELEM_TYPE_PLANE4_EDGES;
+			addEdgesToEdgeList(elem, edgesToAdd, sizeof(edgesToAdd) / sizeof(int) / 2);
+
+			int facesToAdd[][4] = ELEM_TYPE_PLANE4_FACES;
+			addQuadFacesToFaceList(elem, facesToAdd, sizeof(facesToAdd) / sizeof(int) / 4);
+
+			break;
+		}
+		case ELEM_TYPE_281_SHELL8:
+		case ELEM_TYPE_183_PLANE8_6:
+		{
+			if (elem.nodes_num == 8)
+			{
+				int edgesToAdd[][2] = ELEM_TYPE_PLANE8_EDGES;
+				addEdgesToEdgeList(elem, edgesToAdd, sizeof(edgesToAdd) / sizeof(int) / 2);
+
+				int facesToAdd[][4] = ELEM_TYPE_PLANE8_FACES;
+				addQuadFacesToFaceList(elem, facesToAdd, sizeof(facesToAdd) / sizeof(int) / 4);			
+			}
+			else if (elem.nodes_num == 6)
+			{
+				int edgesToAdd[][2] = ELEM_TYPE_PLANE6_EDGES;
+				addEdgesToEdgeList(elem, edgesToAdd, sizeof(edgesToAdd) / sizeof(int) / 2);
+
+				int facesToAdd[][3] = ELEM_TYPE_PLANE6_FACES;
+				addTriFacesToFaceList(elem, facesToAdd, sizeof(facesToAdd) / sizeof(int) / 3);
+			}
+			break;
+		}
+		case ELEM_TYPE_188_BEAM2:
+		{
+			int edgesToAdd[][2] = ELEM_TYPE_BEAM2_EDGES;
+			addEdgesToEdgeList(elem, edgesToAdd, sizeof(edgesToAdd) / sizeof(int) / 2);
+
+			break;
+		}
+		case ELEM_TYPE_189_BEAM3:
+		{
+			int edgesToAdd[][2] = ELEM_TYPE_BEAM3_EDGES;
+			addEdgesToEdgeList(elem, edgesToAdd, sizeof(edgesToAdd) / sizeof(int) / 2);
 
 			break;
 		}

@@ -14,6 +14,16 @@
 #define ELEM_TYPE_TETRA10 10 /**< Number of nodes in a quadratic tetrahedron. */
 #define ELEM_SOLID286     10 /**< Number of nodes in a quadratic tetrahedron in ANSYS APDL notation. */
 
+#define ELEM_TYPE_185_BRICK8	185		/**< ID of type of a linear brick. */
+#define ELEM_TYPE_186_BRICK20	186		/**< ID of type of a quadratic brick. */
+#define ELEM_TYPE_285_TETRA4    285		/**< ID of type of a linear tetrahedron. */
+#define ELEM_TYPE_187_TETRA10	187		/**< ID of type of a quadratic tetrahedron. */
+#define ELEM_TYPE_182_PLANE4	182		/**< ID of type of a linear plane element. */
+#define ELEM_TYPE_183_PLANE8_6  183		/**< ID of type of a quadratic plane element. */
+#define ELEM_TYPE_188_BEAM2		188		/**< ID of type of a linear beam. */
+#define ELEM_TYPE_189_BEAM3		189		/**< ID of type of a quadratic beam. */
+#define ELEM_TYPE_181_SHELL4	181		/**< ID of type of a linear shell element. */
+#define ELEM_TYPE_281_SHELL8	281		/**< ID of type of a quadratic shell element. */
 
 /**
 * Linear tetrahedron edges list
@@ -54,3 +64,43 @@
 * Quadratic brick faces list
 */
 #define ELEM_TYPE_BRICK20_FACES { { 0, 1, 5, 4 }, { 1, 2, 6, 5 }, { 2, 3, 7, 6 }, { 3, 0, 4, 7 }, { 4, 5, 6, 7 }, { 3, 2, 1, 0 } }
+
+/**
+* Linear plane element edges list
+*/
+#define ELEM_TYPE_PLANE4_EDGES { {0, 1}, {0, 3}, {1, 2}, {2, 3}, {1, 0}, {3, 0}, {2, 1}, {3, 2} }
+
+/**
+* Linear plane element faces list
+*/
+#define ELEM_TYPE_PLANE4_FACES { {0, 1, 2, 3} }
+
+/**
+* Quadratic 8-node plane element edges list
+*/
+#define ELEM_TYPE_PLANE8_EDGES { {0, 4}, {0, 7}, {1, 4}, {1, 5}, {2, 5}, {2, 6}, {3, 6}, {3, 7}, {4, 0}, {4, 1}, {5, 1}, {5, 2}, {6, 2}, {6, 3}, {7, 0}, {7, 3} }
+
+/**
+* Quadratic 8-node plane element faces list
+*/
+#define ELEM_TYPE_PLANE8_FACES { {0, 1, 2, 3} }
+
+/**
+* Quadratic 6-node plane element edges list
+*/
+#define ELEM_TYPE_PLANE6_EDGES { {0, 3}, {0, 5}, {1, 3}, {1, 4}, {2, 4}, {2, 5}, {3, 0}, {3, 1}, {4, 1}, {4, 2}, {5, 0}, {5, 2} }
+
+/**
+* Quadratic 6-node plane element faces list
+*/
+#define ELEM_TYPE_PLANE6_FACES { {0, 1, 2} }
+
+/**
+* Linear beam element edges list
+*/
+#define ELEM_TYPE_BEAM2_EDGES { {0, 1}, {1, 0} }
+
+/**
+* Quadratic beam element edges list
+*/
+#define ELEM_TYPE_BEAM3_EDGES { {0, 2}, {1, 2}, {2, 0}, {2, 1} }

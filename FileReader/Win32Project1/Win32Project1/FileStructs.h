@@ -138,5 +138,15 @@ struct _NamedSetFaceS
 {
 	bool internal = false;	/**< Internal or external flag. */
 	
-	int FaceID;				/**< Face ID */
+	int FaceID;				/**< Face ID. */
+};
+
+/**
+* A structure.
+* Structure for holding information of element type.
+*/
+struct _ElementTypeS
+{
+	int ID;					/**< Type ID. */
+	int type;				/**< Type name. */
 };

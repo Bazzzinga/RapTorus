@@ -65,6 +65,7 @@ private:
 	
 	int lastNSFaceID = 0;							/**< variable of last given named set face ID. Used to give all named set faces unique IDs.	*/
 	
+	std::vector<_ElementTypeS> _ElementTypeList;	/**< vector of element types used in model. */
 
 	/**
 	* function to check if string of block format is correct.
