@@ -26,6 +26,8 @@ const std::string c_NamedSetItemsTableCreationQuery = "CREATE TABLE IF NOT EXIST
 
 const std::string c_NamedSetFacesTableCreationQuery = "CREATE TABLE IF NOT EXISTS NamedSetFaces (FaceID INTEGER REFERENCES Faces (FaceID), SetID INTEGER REFERENCES NamedSets (SetID), internal BOOLEAN);";
 
+const std::string c_ElementTypesTableCreationQuery = "CREATE TABLE  IF NOT EXISTS ElementTypes (TypeID INTEGER PRIMARY KEY, TypeName INTEGER);";
+
 const std::string c_selectModelHash = "SELECT ModelHash FROM Model";
 
 const std::string c_selectModelID = "SELECT ModelID FROM Model";
@@ -65,3 +67,5 @@ const std::string c_insertNamedSetFace = "INSERT INTO NamedSetFaces (FaceID, Set
 const std::string c_selectNamedSetFace = "SELECT * FROM NamedSetFaces WHERE FaceID = %d";
 
 const std::string c_updateNamedSetFace = "UPDATE NamedSetFaces SET internal = 1 WHERE FaceID = %d";
+
+const std::string c_insertElementType = "INSERT INTO ElementTypes (TypeID, TypeName) VALUES (%d, %d)";

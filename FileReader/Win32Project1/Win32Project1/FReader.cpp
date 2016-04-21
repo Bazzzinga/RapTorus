@@ -251,6 +251,10 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 			temp.type = typeName;
 
 			_ElementTypeList.push_back(temp);
+
+			char * sqlQueryET = sqlite3_mprintf(c_insertElementType.c_str(), temp.ID, temp.type);
+			dba->execBuffered(sqlQueryET);
+			sqlite3_free(sqlQueryET);
 		}
 
 		/**
@@ -1258,11 +1262,11 @@ bool FReader::checkEdgeInList(unsigned int v_from, unsigned int v_to)
 */
 void FReader::addToEdgeList(unsigned int v_from, unsigned int v_to)
 {
-	if (!checkEdgeInList(v_from, v_to))
+	if ( (!checkEdgeInList(v_from, v_to)) && (!checkEdgeInList(v_to, v_from)))
 	{
 		_EdgesList[getNodeIndex(v_from)].push_back(v_to);
-		if(!checkEdgeInList(v_to, v_from))
-			pushEdgeToDB(v_from, v_to);
+		_EdgesList[getNodeIndex(v_to)].push_back(v_from);
+		pushEdgeToDB(v_from, v_to);
 	}
 }
 
