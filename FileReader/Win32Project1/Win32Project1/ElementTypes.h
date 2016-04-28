@@ -25,6 +25,8 @@
 #define ELEM_TYPE_181_SHELL4	181		/**< ID of type of a linear shell element. */
 #define ELEM_TYPE_281_SHELL8	281		/**< ID of type of a quadratic shell element. */
 
+#define ELEM_TYPE_NO_TYPE		0		/**< ID of empty type. */
+
 /**
 * Linear tetrahedron edges list
 */

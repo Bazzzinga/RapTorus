@@ -430,6 +430,7 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 						 * Adding extracted element to database query buffer.
 						 * @see pushElementToDB()
 						 */
+
 						pushElementToDB(elem);
 
 						/**
@@ -1120,13 +1121,60 @@ int FReader::getBlockRowCount(const char* fn, FILE_BLOCK_TYPES type)
 */
 void FReader::parseElementToEdgesAndFaces(_ElementsS elem)
 {
-	int elemType = 0;
+	int elemType = ELEM_TYPE_NO_TYPE;
 	for (int i = 0; i < (int)_ElementTypeList.size(); ++i)
 		if (_ElementTypeList[i].ID == elem.type)
 			elemType = _ElementTypeList[i].type;
 
 	switch (elemType)
 	{
+		case ELEM_TYPE_NO_TYPE:
+		{
+			switch (elem.nodes_num)
+			{
+				case ELEM_TYPE_BRICK8:
+				{					
+					int edgesToAdd[][2] = ELEM_TYPE_BRICK8_EDGES;
+					addEdgesToEdgeList(elem, edgesToAdd, sizeof(edgesToAdd) / sizeof(int) / 2);
+
+					int facesToAdd[][4] = ELEM_TYPE_BRICK8_FACES;
+					addQuadFacesToFaceList(elem, facesToAdd, sizeof(facesToAdd) / sizeof(int) / 4);
+
+					break;
+				}
+				case ELEM_TYPE_BRICK20:
+				{
+					int edgesToAdd[][2] = ELEM_TYPE_BRICK20_EDGES;
+					addEdgesToEdgeList(elem, edgesToAdd, sizeof(edgesToAdd) / sizeof(int) / 2);
+
+					int facesToAdd[][4] = ELEM_TYPE_BRICK20_FACES;
+					addQuadFacesToFaceList(elem, facesToAdd, sizeof(facesToAdd) / sizeof(int) / 4);
+
+					break;
+				}
+				case ELEM_TYPE_TETRA4:
+				{
+					int edgesToAdd[][2] = ELEM_TYPE_TETRA4_EDGES;
+					addEdgesToEdgeList(elem, edgesToAdd, sizeof(edgesToAdd) / sizeof(int) / 2);
+
+					int facesToAdd[][3] = ELEM_TYPE_TETRA4_FACES;
+					addTriFacesToFaceList(elem, facesToAdd, sizeof(facesToAdd) / sizeof(int) / 3);
+
+					break;
+				}
+				case ELEM_TYPE_TETRA10:
+				{
+					int edgesToAdd[][2] = ELEM_TYPE_TETRA10_EDGES;
+					addEdgesToEdgeList(elem, edgesToAdd, sizeof(edgesToAdd) / sizeof(int) / 2);
+
+					int facesToAdd[][3] = ELEM_TYPE_TETRA10_FACES;
+					addTriFacesToFaceList(elem, facesToAdd, sizeof(facesToAdd) / sizeof(int) / 3);
+
+					break;
+				}
+			}
+			break;
+		}
 		case ELEM_TYPE_285_TETRA4:
 		{						
 			int edgesToAdd[][2] = ELEM_TYPE_TETRA4_EDGES;

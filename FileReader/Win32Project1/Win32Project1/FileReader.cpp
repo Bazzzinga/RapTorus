@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 		{
 			if (i >= argc - 1)
 			{
-				std::cout << "No -f parameter. Read documentation!\n\n";
+				std::cout << "No -f parameter value. Read documentation!\n\n";
 				return 1;
 			}
 			
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 		else if (std::string(argv[i]).compare("-t") == 0)
 		{
 			if (i >= argc - 1)
-				std::cout << "No -t parameter. Using default \"" << DEFAULT_DATABASE_FILE_TYPE << "\" database file type.\n";
+				std::cout << "No -t parameter value. Using default \"" << DEFAULT_DATABASE_FILE_TYPE << "\" database file type.\n";
 			else
 			{
 				databaseFileExt = std::string(argv[i + 1]);
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 		else if (std::string(argv[i]).compare("-p") == 0)
 		{
 			if (i >= argc - 1)
-				std::cout << "No -p parameter. Using default \"" << DEFAULT_DATABASE_FILE_PATH << "\" database file type.\n";
+				std::cout << "No -p parameter value. Using default \"" << DEFAULT_DATABASE_FILE_PATH << "\" database file type.\n";
 			else
 			{
 				databasePath = std::string(argv[i + 1]);
