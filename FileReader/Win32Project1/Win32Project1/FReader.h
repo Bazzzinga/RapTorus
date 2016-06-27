@@ -9,7 +9,7 @@
 #include "Database\DatabaseAgent.h"
 
 /**
-* CDB mesh files file extention.
+* mesh files file extention.
 */
 #define MESH_FILE_TYPE_CDB "cdb"
 
@@ -34,8 +34,7 @@
 #define NS_FACE_LIST_MAX_SIZE 100
 
  /**
-  * FReader class. Main class of current solution. 
-  * Handles .CDB mesh file format.
+  * FReader class. Main class of current solution.   .
   */
 class FReader
 {

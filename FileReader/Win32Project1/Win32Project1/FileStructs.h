@@ -15,8 +15,8 @@
  */
 enum FILE_BLOCK_TYPES
 {
-	CDB_NBLOCK, /**< Node information block in .CDB file. */
-	CDB_EBLOCK  /**< Element information block in .CDB file. */
+	CDB_NBLOCK, /**< Node information block. */
+	CDB_EBLOCK  /**< Element information block. */
 };
 
 /**

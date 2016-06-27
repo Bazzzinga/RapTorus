@@ -191,24 +191,6 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 		 */
 		dba->exec(c_clearAllTables, NULL, NULL);
 	}
-	/**
-	 *	Input file structure (CDB):
-	 *	- Some unused information.
-	 *	- Row starting with "NBLOCK" - begin of node information block.
-	 *		Next row contains format of information table.
-	 *		Format is (XiY,ZeU.W).
-	 *		Where X - the number of first left columns. Y - width of these columns.
-	 *		Z - the number of columns with floating-point numbers (first 3 - node coordinates, last 3 - rotating angles).
-	 *		If row consist of less than Z columns the rest are taken as zeros.
-	 *		U - width of these columns.
-	 *		W - precision.
-	 *		The block ends with "N,R5.3,LOC,  -1{,}" row.
-	 *	- Row starting with "EBLOCK" - begin of element information block.
-	 *		Next row contains format of information table.
-	 *		Format is (XiY) - like NBLOCK fromat.
-	 *		Every row has not more than X columns, the rest are on the next line.
-	 *	    The block ends with "-1" row.
-	 */
 
 	/**
 	 * Counting number of rows in node infortaion table.
@@ -297,8 +279,10 @@ FReader::FReader(const char* fn, DatabaseAgent * _dba)
 
 			/**
 			 * Checking if format line is correct.
-			 */
+			 */			
 			bool res = checkBlockFormat(nb_format_line, "[(]([[:digit:]]+)i([[:digit:]]+),([[:digit:]]+)e([[:digit:]]+).([[:digit:]]+)[)]");
+			if(!res)
+				res = checkBlockFormat(nb_format_line, "[(]([[:digit:]]+)i([[:digit:]]+),([[:digit:]]+)e([[:digit:]]+).([[:digit:]]+)e([[:digit:]]+)[)]");
 			if (!res) { this->err = ERR_WRONG_FILE_FORMAT; return; }
 
 			/**
@@ -749,7 +733,17 @@ _rowFormatS FReader::parseNodeBlockFormat(std::string str)
 	 * Variable with string in regex format to get every item from input format string
 	 * @see FReader()
 	 */
-	std::regex exp("[(]([[:digit:]]+)i([[:digit:]]+),([[:digit:]]+)e([[:digit:]]+).([[:digit:]]+)[)]");
+	bool check_format = checkBlockFormat(str, "[(]([[:digit:]]+)i([[:digit:]]+),([[:digit:]]+)e([[:digit:]]+).([[:digit:]]+)[)]");
+	
+	std::regex exp;
+
+	std::regex exp1("[(]([[:digit:]]+)i([[:digit:]]+),([[:digit:]]+)e([[:digit:]]+).([[:digit:]]+)[)]");
+	std::regex exp2("[(]([[:digit:]]+)i([[:digit:]]+),([[:digit:]]+)e([[:digit:]]+).([[:digit:]]+)e([[:digit:]]+)[)]");
+
+	if (check_format)
+		exp = exp1;
+	else
+		exp = exp2;
 
 	std::smatch match;
 	std::string::const_iterator pos = str.cbegin();
@@ -1050,9 +1044,6 @@ int FReader::getBlockRowCount(const char* fn, FILE_BLOCK_TYPES type)
 	int res = 0;  /**< variable counting amount of read block lines. */
 	bool block_started = false;  /**<  boolean variable - flag of reading block of interest. */
 
-	/**
-	 * For CDB mesh file format node and element blocks have format line that we are not interested in when counting block items.
-	 */
 	if ((type == CDB_NBLOCK) || (type == CDB_EBLOCK))
 		res = -1;
 

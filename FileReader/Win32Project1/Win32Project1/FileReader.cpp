@@ -135,6 +135,8 @@ int main(int argc, char *argv[])
 	std::chrono::duration<double, std::milli> duration = timestamp2 - timestamp1;
 
 	std::cout << "File \"" << file.c_str() << "\" was successfully converted into database \"" << databasePath << "\" in " << duration.count() / 1000 << " s";
-    return 0;
+
+
+	return 0;	
 }
 

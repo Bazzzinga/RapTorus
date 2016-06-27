@@ -4,13 +4,13 @@
     <LocalDebuggerEnvironment>PATH=%PATH%;$(ProjectDir)\Database\sqlite
 $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>-f TETRAQUAD.cdb</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-f test/small/SOLID185_BRICK_SIMPLE.cdb -p test/small/</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LocalDebuggerEnvironment>PATH=%PATH%
 $(ProjectDir)Database\sqlite
 $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>-f TETRAQUAD.cdb</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-f test/small/SOLID185_BRICK_SIMPLE.cdb -p test/small/</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>

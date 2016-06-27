@@ -40,7 +40,7 @@ DatabaseAgent::DatabaseAgent(const char* dbname)
 */
 DatabaseAgent::~DatabaseAgent()
 {
-
+	this->freeBuffer();
 }
 
 /**

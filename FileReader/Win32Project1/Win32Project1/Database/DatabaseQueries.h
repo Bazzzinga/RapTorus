@@ -69,3 +69,4 @@ const std::string c_selectNamedSetFace = "SELECT * FROM NamedSetFaces WHERE Face
 const std::string c_updateNamedSetFace = "UPDATE NamedSetFaces SET internal = 1 WHERE FaceID = %d";
 
 const std::string c_insertElementType = "INSERT INTO ElementTypes (TypeID, TypeName) VALUES (%d, %d)";
+
